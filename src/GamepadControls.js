@@ -17,6 +17,13 @@ var Controls = function(options) {
   var i = 0;
   window.viewer = viewer;
 
+  var checkWin = () => {
+    if(Object.keys(registry._elements).length === 1) {
+      // if only the process itself remains
+      alert('You win');
+    }
+  };
+
   var calculateCoords = (x, y) => {
     var size = canvas.getSize();
     return {
@@ -35,10 +42,12 @@ var Controls = function(options) {
       var gp = gamepads[i];
       if(gp) {
         var realCoordinates = calculateCoords(gp.axes[0], gp.axes[1]);
-        if(this.markers[i]) {
-          this.markers[i].style.left = realCoordinates.x + 'px';
-          this.markers[i].style.top = realCoordinates.y + 'px';
+        if(!this.markers[i]) {
+          this.markers[i] = createMarker();
+          this.shotAllowed[i] = true;
         }
+        this.markers[i].style.left = realCoordinates.x + 'px';
+        this.markers[i].style.top = realCoordinates.y + 'px';
 
         if(this.shotAllowed[i] && gp.buttons[0].pressed) {
           debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
@@ -48,8 +57,11 @@ var Controls = function(options) {
           }
           var dataElementId = objHit.getAttribute('data-element-id');
           if(dataElementId) {
-            console.log('hit', dataElementId);
-            modeling.removeElements([registry.get(dataElementId)]);
+            var el = registry.get(dataElementId);
+            if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
+              modeling.removeElements([registry.get(dataElementId)]);
+              checkWin();
+            }
           }
           this.shotAllowed[i] = false;
         }
@@ -72,24 +84,12 @@ var Controls = function(options) {
     el.style.width = '5px';
     el.style.height = '5px';
     el.style.backgroundColor = colors[colorCount++];
+    document.body.appendChild(el);
 
     return el;
   };
 
-  window.addEventListener("gamepadconnected", e => {
-    this.gamepads.push(e.gamepad);
-    console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-      e.gamepad.index, e.gamepad.id,
-      e.gamepad.buttons.length, e.gamepad.axes.length);
-
-    var marker = createMarker();
-    this.markers.push(marker);
-    this.shotAllowed.push(true);
-    document.body.appendChild(marker);
-
-    requestAnimationFrame(update);
-
-  });
+  update();
 };
 
 module.exports = Controls;
