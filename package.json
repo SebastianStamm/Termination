@@ -5,8 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "browserify index.js -o bundle.js",
-    "auto-build": "watchify index.js -o bundle.js -v"
+    "build": "browserify -t brfs index.js -o bundle.js",
+    "auto-build": "watchify -t brfs index.js -o bundle.js -v"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/SebastianStamm/Termination#readme",
   "devDependencies": {
+    "brfs": "^1.4.3",
     "browserify": "^13.0.1",
     "watchify": "^3.7.0"
   },
