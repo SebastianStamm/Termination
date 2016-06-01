@@ -2,10 +2,11 @@ var Controller = require('./src/GamepadControls');
 
 var Modeler = require('bpmn-js/lib/Modeler');
 
-Modeler.prototype._modelingModules = [
+
+Modeler.prototype._modules = [
+  require('bpmn-js/lib/core'),
   require('bpmn-js/lib/features/modeling')
 ];
-
 
 var fs = require('fs');
 
