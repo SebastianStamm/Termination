@@ -1,0 +1,28 @@
+{
+  "name": "termination",
+  "version": "0.0.1",
+  "description": "Termination Game",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify index.js -o bundle.js",
+    "auto-build": "watchify index.js -o bundle.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SebastianStamm/Termination.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SebastianStamm/Termination/issues"
+  },
+  "homepage": "https://github.com/SebastianStamm/Termination#readme",
+  "devDependencies": {
+    "browserify": "^13.0.1",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "bpmn-js": "^0.15.2"
+  }
+}
