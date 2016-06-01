@@ -1,3 +1,5 @@
+var Controller = require('./src/GamepadControls');
+
 var BpmnViewer = require('bpmn-js');
 var fs = require('fs');
 
@@ -8,9 +10,9 @@ window.addEventListener('load', function() {
   var viewer = new BpmnViewer({ container: document.body });
   viewer.importXML(xml, function(err) {
     if (err) {
-      console.log('error rendering', err);
+      alert('Oh no!! ' + err);
     } else {
-      console.log('rendered');
+      var ctrl = new Controller({viewer: viewer});
     }
   });
 });
