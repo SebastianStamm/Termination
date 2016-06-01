@@ -90,6 +90,7 @@ var Controls = function(events) {
     el.style.position = 'absolute';
     el.style.width = '5px';
     el.style.height = '5px';
+    el.style.pointerEvents = 'none';
     el.style.backgroundColor = colors[colorCount++];
     container.appendChild(el);
 

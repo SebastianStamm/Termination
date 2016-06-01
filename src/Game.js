@@ -33,11 +33,15 @@ var Game = function(events) {
     if(this.running) {
       // debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
       var objHit = document.elementFromPoint(data.at.x, data.at.y);
-      if(!objHit || objHit === document) {
-        return;
-      }
-      while(!objHit.getAttribute('data-element-id') && objHit.parentNode) {
+      console.log(objHit);
+      while(objHit && !objHit.getAttribute('data-element-id') && objHit.parentNode) {
         objHit = objHit.parentNode;
+        if(objHit === document) {
+          return;
+        }
+      }
+      if(!objHit) {
+        return;
       }
       var dataElementId = objHit.getAttribute('data-element-id');
       if(dataElementId) {
