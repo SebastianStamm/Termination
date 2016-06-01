@@ -1,26 +1,17 @@
-var Controller = require('./src/GamepadControls');
+var EventEmitter = require('events');
 
-var Modeler = require('bpmn-js/lib/Modeler');
-
-
-Modeler.prototype._modules = [
-  require('bpmn-js/lib/core'),
-  require('bpmn-js/lib/features/modeling')
-];
-
-var fs = require('fs');
-
-var xml = fs.readFileSync(__dirname + '/levels/level1.bpmn', 'utf8');
+var Highscore = require('./src/Highscore');
+var GamepadControls = require('./src/GamepadControls');
+var Game = require('./src/Game');
 
 window.addEventListener('load', function() {
 
-  var viewer = new Modeler({ container: document.body, additionalModules: [ require('bpmn-js/lib/features/modeling') ] });
-  viewer.importXML(xml, function(err) {
-    if (err) {
-      alert('Oh no!! ' + err);
-    } else {
-      var ctrl = new Controller({viewer: viewer});
-    }
-  });
+  var events = new EventEmitter();
+
+  var game = new Game(events);
+  var scoreBoard = new Highscore(events);
+  var controls = new GamepadControls(events);
+
+  // new Highscore(xml);
 });
 

@@ -1,35 +1,37 @@
-var Controls = function(options) {
-  var viewer = options.viewer,
-      canvas = viewer.get('canvas'),
-      modeling = viewer.get('modeling'),
-      registry = viewer.get('elementRegistry');
+var Controls = function(events) {
 
   this.gamepads = [];
   this.markers = [];
   this.shotAllowed = [];
 
+  var container = document.createElement('div');
+  document.body.appendChild(container);
+
   var debug = document.createElement('div');
   debug.style.position = 'absolute';
   debug.style.top = 0;
   debug.textContent = 'Hello';
-  document.body.appendChild(debug);
+  // container.appendChild(debug);
 
-  var i = 0;
-  window.viewer = viewer;
+  // var i = 0;
+  // window.viewer = viewer;
 
-  var checkWin = () => {
-    if(Object.keys(registry._elements).length === 1) {
-      // if only the process itself remains
-      alert('You win');
-    }
-  };
+  // var checkWin = () => {
+  //   if(Object.keys(registry._elements).length === 1) {
+  //     // if only the process itself remains
+  //     alert('You win');
+  //   }
+  // };
 
   var calculateCoords = (x, y) => {
-    var size = canvas.getSize();
+    var size = {
+      width: document.body.clientWidth,
+      height: document.body.clientHeight
+    };
     return {
       x: size.width / 2 + size.width * x / 2,
       y: size.height / 2 + size.height * y / 2
-    }
+    };
   };
 
   var update = () => {
@@ -50,19 +52,24 @@ var Controls = function(options) {
         this.markers[i].style.top = realCoordinates.y + 'px';
 
         if(this.shotAllowed[i] && gp.buttons[0].pressed) {
-          debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
-          var objHit = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
-          while(!objHit.getAttribute('data-element-id') && objHit.parentNode) {
-            objHit = objHit.parentNode;
-          }
-          var dataElementId = objHit.getAttribute('data-element-id');
-          if(dataElementId) {
-            var el = registry.get(dataElementId);
-            if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
-              modeling.removeElements([registry.get(dataElementId)]);
-              checkWin();
-            }
-          }
+          console.log('fire shot');
+          events.emit('shot.fired', {
+            player: i,
+            at: realCoordinates
+          });
+          // debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
+          // var objHit = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
+          // while(!objHit.getAttribute('data-element-id') && objHit.parentNode) {
+          //   objHit = objHit.parentNode;
+          // }
+          // var dataElementId = objHit.getAttribute('data-element-id');
+          // if(dataElementId) {
+          //   var el = registry.get(dataElementId);
+          //   if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
+          //     modeling.removeElements([registry.get(dataElementId)]);
+          //     checkWin();
+          //   }
+          // }
           this.shotAllowed[i] = false;
         }
 
@@ -84,7 +91,7 @@ var Controls = function(options) {
     el.style.width = '5px';
     el.style.height = '5px';
     el.style.backgroundColor = colors[colorCount++];
-    document.body.appendChild(el);
+    container.appendChild(el);
 
     return el;
   };
