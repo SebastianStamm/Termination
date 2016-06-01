@@ -1,11 +1,12 @@
 var Controls = function(options) {
   var viewer = options.viewer,
-      canvas = viewer.get('canvas');
-
-  console.log(viewer);
+      canvas = viewer.get('canvas'),
+      modeling = viewer.get('modeling'),
+      registry = viewer.get('elementRegistry');
 
   this.gamepads = [];
   this.markers = [];
+  this.shotAllowed = [];
 
   var debug = document.createElement('div');
   debug.style.position = 'absolute';
@@ -34,11 +35,29 @@ var Controls = function(options) {
       var gp = gamepads[i];
       if(gp) {
         var realCoordinates = calculateCoords(gp.axes[0], gp.axes[1]);
-        debug.innerText = realCoordinates.x + ', ' + realCoordinates.y;
         if(this.markers[i]) {
           this.markers[i].style.left = realCoordinates.x + 'px';
           this.markers[i].style.top = realCoordinates.y + 'px';
         }
+
+        if(this.shotAllowed[i] && gp.buttons[0].pressed) {
+          debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
+          var objHit = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
+          while(!objHit.getAttribute('data-element-id') && objHit.parentNode) {
+            objHit = objHit.parentNode;
+          }
+          var dataElementId = objHit.getAttribute('data-element-id');
+          if(dataElementId) {
+            console.log('hit', dataElementId);
+            modeling.removeElements([registry.get(dataElementId)]);
+          }
+          this.shotAllowed[i] = false;
+        }
+
+        if(!gp.buttons[0].pressed) {
+          this.shotAllowed[i] = true;
+        }
+
       }
     }
 
@@ -65,15 +84,12 @@ var Controls = function(options) {
 
     var marker = createMarker();
     this.markers.push(marker);
+    this.shotAllowed.push(true);
     document.body.appendChild(marker);
 
     requestAnimationFrame(update);
 
   });
-};
-
-Controls.prototype.update = function() {
-
 };
 
 module.exports = Controls;
