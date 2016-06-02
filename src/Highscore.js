@@ -6,17 +6,12 @@ var test = fs.readFileSync(__dirname + '/../levels/level.json', 'utf8');
 var Highscore = function(events) {
   this.events = events;
   this.container = document.createElement('div');
-  this.container.style.position = 'absolute';
-  this.container.style.top = 0;
-  this.container.style.bottom = 0;
-  this.container.style.left = 0;
-  this.container.style.right = 0;
-  this.container.style.background = 'url(\'img/bg.jpg\')';
+  this.container.className = 'container';
   document.body.appendChild(this.container);
 
   this.highscore = Infinity;
 
-  this.container.innerHTML = '<h1>Termination</h1><h2 id="yourTime" class="yourTime">Your Time: <span id="latest"></span><h2 id="fastestTime">Fastest Time: <span id="score"></span></h2><h3>Shoot to play!</h3>'
+  this.container.innerHTML = document.querySelector('[type="text/template"]#game').innerHTML;
   document.getElementById('yourTime').style.display = 'none';
   document.getElementById('fastestTime').style.display = 'none';
 

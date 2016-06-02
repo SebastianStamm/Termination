@@ -5,8 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "browserify -t brfs index.js -o bundle.js",
-    "auto-build": "watchify -t brfs index.js -o bundle.js -v"
+    "build": "browserify -t brfs index.js -d -o bundle.js",
+    "auto-build": "watchify -t brfs index.js -o bundle.js -v -d"
   },
   "repository": {
     "type": "git",
