@@ -18,7 +18,6 @@ window.addEventListener('load', function() {
 
   var sounds = Termination.sounds = new Sounds(events);
   var screenShaking = Termination.screenShaking = new ScreenShaking(events);
-
   var particles = Termination.particles = new Particles(events);
 });
 
