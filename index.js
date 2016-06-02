@@ -4,6 +4,7 @@ var Highscore = require('./src/Highscore');
 var GamepadControls = require('./src/GamepadControls');
 var Game = require('./src/Game');
 var Sounds = require('./src/Sounds');
+var ScreenShaking = require('./src/ScreenShaking');
 
 window.addEventListener('load', function() {
 
@@ -14,6 +15,6 @@ window.addEventListener('load', function() {
   var controls = new GamepadControls(events);
 
   var sounds = new Sounds(events);
-  // new Highscore(xml);
+  var screenShaking = new ScreenShaking(events);
 });
 
