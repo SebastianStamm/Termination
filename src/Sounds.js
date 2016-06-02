@@ -5,6 +5,12 @@ var explosionCount = 0;
 
 var Sounds = function(events) {
 
+  var background = new Audio('sound/bg.mp3');
+  background.loop = true;
+  background.volume = .4;
+  background.play();
+  window.bg = background;
+
   events.on('shot.fired', () => {
     shoot[shootCount++%3].play();
   });
