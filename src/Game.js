@@ -15,16 +15,65 @@ var Game = function(events) {
   document.body.appendChild(this.container);
 
   this.running = false;
+  this.startTime = 0;
 
-  events.on('game.start', (xml) => {
+  var progress = () => {
+    if(!this.running) {
+      return;
+    }
+
+    var delta = Date.now() - this.startTime;
+
+    for(var i = 0; i < this.gameData.progress.length; i++) {
+      if(this.gameData.progress[i].timestamp > delta) {
+        break;
+      }
+    }
+    var next = this.gameData.progress[i];
+    var prev = this.gameData.progress[i-1];
+
+    if(!prev) {
+      prev = {
+        "timestamp": 0,
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "zoom": 1
+      };
+    }
+    if(next) {
+      var innerProgress = (delta - prev.timestamp) / (next.timestamp - prev.timestamp);
+      var current = {
+        position: {
+          x: prev.position.x + (next.position.x - prev.position.x) * innerProgress,
+          y: prev.position.y + (next.position.y - prev.position.y) * innerProgress
+        },
+        zoom: prev.zoom + (next.zoom - prev.zoom) * innerProgress
+      };
+      var currentBox = this.viewer.get('canvas').viewbox();
+      currentBox.x = current.position.x;
+      currentBox.y = current.position.y;
+
+      this.viewer.get('canvas').viewbox(currentBox);
+    }
+
+
+    requestAnimationFrame(progress);
+  }
+
+  events.on('game.start', (gameData) => {
+    this.gameData = gameData;
     this.viewer = new Modeler({ container: this.container });
-    this.viewer.importXML(xml, (err) => {
+    this.viewer.importXML(gameData.xml, (err) => {
       if (err) {
         alert('Oh no!! ' + err);
       } else {
         this.running = true;
         this.registry = this.viewer.get('elementRegistry');
         this.modeling = this.viewer.get('modeling');
+        this.startTime = Date.now();
+        progress();
       }
     });
   });
