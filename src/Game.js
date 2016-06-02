@@ -56,6 +56,7 @@ var Game = function(events) {
       currentBox.y = current.position.y;
 
       this.viewer.get('canvas').viewbox(currentBox);
+      this.viewer.get('canvas').zoom(current.zoom);
     }
 
 
