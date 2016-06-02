@@ -1,8 +1,9 @@
 var Magazine = function(bulletCount) {
   this.container = document.createElement('div');
   this.container.style.position = 'absolute';
-  this.container.style.top = 0;
-  this.container.style.right = 0;
+  this.container.style.top = 100 + 'px';
+  this.container.style.right = 20 + 'px';
+  this.container.style.transform = 'scale(1.5)';
   document.body.appendChild(this.container);
 
   this.maxBullets = bulletCount;
@@ -28,7 +29,7 @@ Magazine.prototype.reload = function() {
 Magazine.prototype.updateContainer = function() {
   var out = '';
   for(var i = 0; i < this.bullets; i++) {
-    out += '<div style="width: 20px; height: 20px; background-color: black; border: 2px solid white;"></div>';
+    out += '<img src="img/bullet.png"><br/>';
   }
   this.container.innerHTML = out;
 };
