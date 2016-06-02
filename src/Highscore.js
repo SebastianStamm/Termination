@@ -41,10 +41,11 @@ Highscore.prototype.startGame = function() {
       this.highscore = endTime - this.startTime;
       document.getElementById('score').innerText = this.highscore / 1000 + 's';
     }
-
-    this.events.once('shot.fired', () => {
-      this.startGame();
-    });
+    window.setTimeout(() => {
+      this.events.once('shot.fired', () => {
+        this.startGame();
+      });
+    }, 2000);
   });
 };
 

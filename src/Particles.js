@@ -22,9 +22,7 @@ var Particles = function(events) {
 
       particle.node.style.left = particle.pos.x + 'px';
       particle.node.style.top = particle.pos.y + 'px';
-
     });
-
 
     requestAnimationFrame(animate);
   };
