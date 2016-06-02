@@ -3,6 +3,8 @@ var Controls = function(events) {
   this.gamepads = [];
   this.markers = [];
   this.shotAllowed = [];
+  this.btn2 = [];
+  this.btn3 = [];
 
   var container = document.createElement('div');
   document.body.appendChild(container);
@@ -31,6 +33,8 @@ var Controls = function(events) {
         if(!this.markers[i]) {
           this.markers[i] = createMarker();
           this.shotAllowed[i] = true;
+          this.btn2[i] = true;
+          this.btn3[i] = true;
         }
         this.markers[i].style.left = realCoordinates.x + 'px';
         this.markers[i].style.top = realCoordinates.y + 'px';
@@ -45,6 +49,28 @@ var Controls = function(events) {
 
         if(!gp.buttons[0].pressed) {
           this.shotAllowed[i] = true;
+        }
+        if(this.btn2[i] && gp.buttons[1].pressed) {
+          events.emit('button2.pressed', {
+            player: i,
+            at: realCoordinates
+          });
+          this.btn2[i] = false;
+        }
+
+        if(!gp.buttons[1].pressed) {
+          this.btn2[i] = true;
+        }
+        if(this.btn3[i] && gp.buttons[2].pressed) {
+          events.emit('button3.pressed', {
+            player: i,
+            at: realCoordinates
+          });
+          this.btn3[i] = false;
+        }
+
+        if(!gp.buttons[2].pressed) {
+          this.btn3[i] = true;
         }
 
       }
