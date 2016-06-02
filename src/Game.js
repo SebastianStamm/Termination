@@ -47,6 +47,7 @@ var Game = function(events) {
         var el = this.registry.get(dataElementId);
         if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
           this.modeling.removeElements([this.registry.get(dataElementId)]);
+          events.emit('element.destroyed', dataElementId);
           if(Object.keys(this.registry._elements).length === 1) {
             // if only the process itself remains
             this.running = false;
