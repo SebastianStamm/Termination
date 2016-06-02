@@ -54,7 +54,7 @@ var Particles = function(events) {
   events.on('element.destroyed', (data) => {
     createParticle(10, data.shot.at);
   });
-  events.on('shot.fired', (data) => {
+  events.on('magazine.shoot', (data) => {
     createParticle(1, data.at);
   });
 

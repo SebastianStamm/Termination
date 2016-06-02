@@ -90,6 +90,7 @@ var Game = function(events) {
 
   events.on('button3.pressed', data => {
     if(this.magazine[data.player] && !this.magazine[data.player].reloading) {
+      events.emit('reload.start', data);
       this.magazine[data.player].reloading = true;
       window.setTimeout(() => {
         this.magazine[data.player].reload();
@@ -115,6 +116,7 @@ var Game = function(events) {
       }
 
       this.magazine[data.player].shoot();
+      events.emit('magazine.shoot', data);
 
       var objHit = document.elementFromPoint(data.at.x, data.at.y);
       while(objHit && !objHit.getAttribute('data-element-id') && objHit.parentNode) {
