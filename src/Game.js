@@ -31,7 +31,6 @@ var Game = function(events) {
 
   events.on('shot.fired', (data) => {
     if(this.running) {
-      // debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
       var objHit = document.elementFromPoint(data.at.x, data.at.y);
       console.log(objHit);
       while(objHit && !objHit.getAttribute('data-element-id') && objHit.parentNode) {

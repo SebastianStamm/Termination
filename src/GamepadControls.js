@@ -7,22 +7,6 @@ var Controls = function(events) {
   var container = document.createElement('div');
   document.body.appendChild(container);
 
-  var debug = document.createElement('div');
-  debug.style.position = 'absolute';
-  debug.style.top = 0;
-  debug.textContent = 'Hello';
-  // container.appendChild(debug);
-
-  // var i = 0;
-  // window.viewer = viewer;
-
-  // var checkWin = () => {
-  //   if(Object.keys(registry._elements).length === 1) {
-  //     // if only the process itself remains
-  //     alert('You win');
-  //   }
-  // };
-
   var calculateCoords = (x, y) => {
     var size = {
       width: document.body.clientWidth,
@@ -52,24 +36,10 @@ var Controls = function(events) {
         this.markers[i].style.top = realCoordinates.y + 'px';
 
         if(this.shotAllowed[i] && gp.buttons[0].pressed) {
-          console.log('fire shot');
           events.emit('shot.fired', {
             player: i,
             at: realCoordinates
           });
-          // debug.innerText = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
-          // var objHit = document.elementFromPoint(realCoordinates.x, realCoordinates.y);
-          // while(!objHit.getAttribute('data-element-id') && objHit.parentNode) {
-          //   objHit = objHit.parentNode;
-          // }
-          // var dataElementId = objHit.getAttribute('data-element-id');
-          // if(dataElementId) {
-          //   var el = registry.get(dataElementId);
-          //   if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
-          //     modeling.removeElements([registry.get(dataElementId)]);
-          //     checkWin();
-          //   }
-          // }
           this.shotAllowed[i] = false;
         }
 
@@ -83,7 +53,7 @@ var Controls = function(events) {
     requestAnimationFrame(update);
   };
 
-  var colors = ['red', 'blue', 'green', 'yellow'];
+  var colors = ['lightgreen', 'yellow', 'red', 'white'];
   var colorCount = 0;
   var createMarker = () => {
     var el = document.createElement('div');
