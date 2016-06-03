@@ -3,6 +3,8 @@ var xml = fs.readFileSync(__dirname + '/../levels/level1.bpmn', 'utf8');
 
 var test = fs.readFileSync(__dirname + '/../levels/level.json', 'utf8');
 
+var templates = require('./templates');
+
 var Highscore = function(events) {
   this.events = events;
   this.container = document.createElement('div');
@@ -11,7 +13,7 @@ var Highscore = function(events) {
 
   this.highscore = Infinity;
 
-  this.container.innerHTML = document.querySelector('[type="text/template"]#game').innerHTML;
+  this.container.innerHTML = templates('game').innerHTML;
   document.getElementById('yourTime').style.display = 'none';
   document.getElementById('fastestTime').style.display = 'none';
 

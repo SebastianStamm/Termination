@@ -1,9 +1,6 @@
 var Magazine = function(bulletCount) {
   this.container = document.createElement('div');
-  this.container.style.position = 'absolute';
-  this.container.style.top = 100 + 'px';
-  this.container.style.right = 20 + 'px';
-  this.container.style.transform = 'scale(1.5)';
+  this.container.className = 'magazine';
   document.body.appendChild(this.container);
 
   this.maxBullets = bulletCount;

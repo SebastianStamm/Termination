@@ -83,10 +83,7 @@ var Controls = function(events) {
   var colorCount = 0;
   var createMarker = () => {
     var el = document.createElement('div');
-    el.style.position = 'absolute';
-    el.style.width = '12px';
-    el.style.height = '12px';
-    el.style.pointerEvents = 'none';
+    el.className = 'marker';
     el.style.backgroundColor = colors[colorCount++];
     container.appendChild(el);
 

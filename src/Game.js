@@ -9,11 +9,7 @@ Modeler.prototype._modules = [
 
 var Game = function(events) {
   this.container = document.createElement('div');
-  this.container.style.position = 'absolute';
-  this.container.style.top = 0;
-  this.container.style.bottom = 0;
-  this.container.style.left = 0;
-  this.container.style.right = 0;
+  this.container.className = 'game-container';
   document.body.appendChild(this.container);
 
   this.running = false;
