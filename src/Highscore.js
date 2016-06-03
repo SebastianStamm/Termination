@@ -13,7 +13,7 @@ var Highscore = function(events) {
 
   this.highscore = Infinity;
 
-  this.container.innerHTML = templates('game').innerHTML;
+  this.container.innerHTML = templates('game');
   document.getElementById('yourTime').style.display = 'none';
   document.getElementById('fastestTime').style.display = 'none';
 
