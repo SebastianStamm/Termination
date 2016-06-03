@@ -43,6 +43,18 @@ h2,
 h3 {
   font-family: 'Stardos Stencil';
   font-weight: normal;
+  animation: textglow 3s infinite alternate;
+}
+
+@keyframes textglow {
+  from {
+    text-shadow: 0 0 100px rgba(0,200,0,1);
+    color: rgb(100, 200, 100);
+  }
+  to {
+    text-shadow: 0 0 50px rgba(0,200,0,1);
+    color: rgb(0, 200, 0);
+  }
 }
 
 .game-container {
