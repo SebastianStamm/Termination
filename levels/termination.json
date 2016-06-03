@@ -277,10 +277,10 @@
     {
       "timestamp": 600,
       "position": {
-        "x": 5700,
+        "x": 5650,
         "y": -328
       },
-      "zoom": 1.77
+      "zoom": 1.5
     },
     {
       "waitFor": ["t16", "t17"]
@@ -288,10 +288,10 @@
     {
       "timestamp": 600,
       "position": {
-        "x": 5700,
+        "x": 5650,
         "y": 246
       },
-      "zoom": 1.77
+      "zoom": 1.5
     },
     {
       "waitFor": ["t18", "t19", "ParallelGateway_0mnjro3", "ParallelGateway_17dgjos"]
@@ -299,7 +299,7 @@
     {
       "timestamp": 1000,
       "position": {
-        "x": 6836,
+        "x": 6846,
         "y": 240
       },
       "zoom": 10
