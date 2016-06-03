@@ -23,7 +23,7 @@ var Game = function(events) {
     var delta = Date.now() - this.startTime;
 
     for(var i = 0; i < this.gameData.progress.length; i++) {
-      if(this.gameData.progress[i].timestamp > delta ||
+      if(this.gameData.progress[i].timestamp >= delta ||
          this.gameData.progress[i].waitFor) {
         break;
       }
@@ -59,6 +59,12 @@ var Game = function(events) {
         this.viewer.get('canvas').zoom(current.zoom);
       } else if(next.waitFor) {
         // waits for elements to be destroyed
+        var currentBox = this.viewer.get('canvas').viewbox();
+        currentBox.x = prev.position.x;
+        currentBox.y = prev.position.y;
+
+        this.viewer.get('canvas').viewbox(currentBox);
+        this.viewer.get('canvas').zoom(prev.zoom);
 
         // check if the elements exists
         var remainingElements = this.viewer.get('elementRegistry').filter(element => {
@@ -68,7 +74,14 @@ var Game = function(events) {
           // if the element got destroyed
 
           // remove all actions from the gamedata.progress up to and including the waited element
-          this.gameData.progress.splice(0, i+1);
+          this.gameData.progress.splice(0, i+1, {
+            "timestamp": 0,
+            "position": {
+              "x": prev.position.x,
+              "y": prev.position.y
+            },
+            "zoom": prev.zoom
+          });
 
           // reset the startTime
           this.startTime = Date.now();
@@ -82,6 +95,7 @@ var Game = function(events) {
   events.on('game.start', (gameData) => {
     this.gameData = gameData;
     this.viewer = new Modeler({ container: this.container });
+    window.c = this.viewer.get('canvas');
     this.viewer.importXML(gameData.xml, (err) => {
       if (err) {
         alert('Oh no!! ' + err);
