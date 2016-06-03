@@ -13,7 +13,7 @@
     requestAnimationFrame(shake);
   };
 
-  events.on('shot.fired', () => {
+  events.on('magazine.shoot', () => {
     this.intensity += 5;
   });
 

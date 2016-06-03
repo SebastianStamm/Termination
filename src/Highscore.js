@@ -18,14 +18,8 @@ var Highscore = function(events) {
   events.once('shot.fired', () => {
     this.startGame();
   });
-};
 
-Highscore.prototype.startGame = function() {
-  this.container.style.display = 'none';
-  this.startTime = Date.now();
-  this.events.emit('game.start', JSON.parse(test));
-
-  this.events.once('game.finish', () => {
+  this.events.on('game.finish', () => {
     var endTime = Date.now();
     document.getElementById('latest').innerText = (endTime - this.startTime) / 1000 + 's';
     this.container.style.display = 'block';
@@ -42,6 +36,23 @@ Highscore.prototype.startGame = function() {
       });
     }, 2000);
   });
+
+  this.events.on('game.abort', () => {
+    this.container.style.display = 'block';
+    document.getElementById('yourTime').style.display = 'none';
+    document.getElementById('fastestTime').style.display = 'block';
+    window.setTimeout(() => {
+      this.events.once('shot.fired', () => {
+        this.startGame();
+      });
+    }, 2000);
+  });
+};
+
+Highscore.prototype.startGame = function() {
+  this.container.style.display = 'none';
+  this.startTime = Date.now();
+  this.events.emit('game.start', JSON.parse(test));
 };
 
 module.exports = Highscore;
