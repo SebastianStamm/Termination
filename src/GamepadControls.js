@@ -51,7 +51,7 @@ var Controls = function(events) {
           this.shotAllowed[i] = true;
         }
         if(this.btn2[i] && gp.buttons[1].pressed) {
-          events.emit('button2.pressed', {
+          events.emit('button3.pressed', {
             player: i,
             at: realCoordinates
           });
