@@ -23,7 +23,8 @@ var Game = function(events) {
     var delta = Date.now() - this.startTime;
 
     for(var i = 0; i < this.gameData.progress.length; i++) {
-      if(this.gameData.progress[i].timestamp > delta) {
+      if(this.gameData.progress[i].timestamp > delta ||
+         this.gameData.progress[i].waitFor) {
         break;
       }
     }
@@ -41,23 +42,40 @@ var Game = function(events) {
       };
     }
     if(next) {
-      var innerProgress = (delta - prev.timestamp) / (next.timestamp - prev.timestamp);
-      var current = {
-        position: {
-          x: prev.position.x + (next.position.x - prev.position.x) * innerProgress,
-          y: prev.position.y + (next.position.y - prev.position.y) * innerProgress
-        },
-        zoom: prev.zoom + (next.zoom - prev.zoom) * innerProgress
-      };
-      var currentBox = this.viewer.get('canvas').viewbox();
-      currentBox.x = current.position.x;
-      currentBox.y = current.position.y;
+      if(next.timestamp) {
+        var innerProgress = (delta - prev.timestamp) / (next.timestamp - prev.timestamp);
+        var current = {
+          position: {
+            x: prev.position.x + (next.position.x - prev.position.x) * innerProgress,
+            y: prev.position.y + (next.position.y - prev.position.y) * innerProgress
+          },
+          zoom: prev.zoom + (next.zoom - prev.zoom) * innerProgress
+        };
+        var currentBox = this.viewer.get('canvas').viewbox();
+        currentBox.x = current.position.x;
+        currentBox.y = current.position.y;
 
-      this.viewer.get('canvas').viewbox(currentBox);
-      this.viewer.get('canvas').zoom(current.zoom);
+        this.viewer.get('canvas').viewbox(currentBox);
+        this.viewer.get('canvas').zoom(current.zoom);
+      } else if(next.waitFor) {
+        // waits for elements to be destroyed
+
+        // check if the elements exists
+        var remainingElements = this.viewer.get('elementRegistry').filter(element => {
+          return next.waitFor.indexOf(element.id) !== -1;
+        });
+        if(remainingElements.length === 0) {
+          // if the element got destroyed
+
+          // remove all actions from the gamedata.progress up to and including the waited element
+          this.gameData.progress.splice(0, i+1);
+
+          // reset the startTime
+          this.startTime = Date.now();
+        }
+
+      }
     }
-
-
     requestAnimationFrame(progress);
   }
 

@@ -1,7 +1,7 @@
 var fs = require('fs');
 var xml = fs.readFileSync(__dirname + '/../levels/level1.bpmn', 'utf8');
 
-var test = fs.readFileSync(__dirname + '/../levels/level.json', 'utf8');
+var test = fs.readFileSync(__dirname + '/../levels/termination.json', 'utf8');
 
 var templates = require('./templates');
 
