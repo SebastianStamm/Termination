@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'Stardos Stencil';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Stardos-Stencil-regular/Stardos-Stencil-regular.eot');
+  src: url('/fonts/Stardos-Stencil-regular/Stardos-Stencil-regular.eot?#iefix') format('embedded-opentype'),
+       local('Stardos Stencil Regular'),
+       local('Stardos-Stencil-regular'),
+       url('/fonts/Stardos-Stencil-regular/Stardos-Stencil-regular.woff2') format('woff2'),
+       url('/fonts/Stardos-Stencil-regular/Stardos-Stencil-regular.woff') format('woff'),
+       url('/fonts/Stardos-Stencil-regular/Stardos-Stencil-regular.ttf') format('truetype'),
+       url('/fonts/Stardos-Stencil-regular/Stardos-Stencil-regular.svg#StardosStencil') format('svg');
+}
+
+
 body {
   position:absolute;
   top:0;
@@ -23,13 +38,19 @@ body:after {
   background: repeat url(./img/screen-pattern.png);
 }
 
+h1,
+h2,
+h3 {
+  font-family: 'Stardos Stencil';
+  font-weight: normal;
+}
+
 h1 {
   text-align: center;
   color: rgb(0,200,0);
   margin-top: 150px;
   margin-bottom: 30px;
   font-size: 120px;
-  font-family: 'Cinzel', serif;
 }
 
 h2 {
