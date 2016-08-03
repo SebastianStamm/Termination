@@ -7,9 +7,9 @@ var reload = new Audio('sound/reload.wav');
 
 var Sounds = function(events) {
 
-  var background = new Audio('sound/bg.mp3');
+  var background = new Audio('sound/bg.wav');
   background.loop = true;
-  background.volume = .4;
+  background.volume = .7;
   background.play();
   window.bg = background;
 
