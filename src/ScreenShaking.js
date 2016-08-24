@@ -2,6 +2,10 @@
   this.intensity = 0;
 
   var shake = () => {
+
+    // cap to maximum shake 40
+    this.intensity = Math.min(this.intensity, 40);
+
     document.body.style.marginTop  = 2 * Math.random() * this.intensity - this.intensity + 'px';
     document.body.style.marginLeft = 2 * Math.random() * this.intensity - this.intensity + 'px';
 

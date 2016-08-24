@@ -1,15 +1,21 @@
 var Modeler = require('bpmn-js/lib/Modeler');
 
+var Timekeeping = require('./Timekeeping');
+
 Modeler.prototype._modules = [
   require('bpmn-js/lib/core'),
   require('bpmn-js/lib/features/modeling')
 ];
 
+var INITIAL_TIME = 15 * 1000;
 
 var Game = function(events) {
+  this.events = events;
   this.container = document.createElement('div');
   this.container.className = 'game-container';
   document.body.appendChild(this.container);
+
+  this.timekeeping = new Timekeeping();
 
   this.running = false;
   // this.startTime = 0;
@@ -18,6 +24,17 @@ var Game = function(events) {
     if(!this.running) {
       return;
     }
+
+    // timekeeping
+    var timeSinceLastUpdate = Date.now() - this.lastUpdate;
+    this.remainingTime -= timeSinceLastUpdate;
+    this.lastUpdate = Date.now();
+
+    if(this.remainingTime < 0) {
+      this.gameOver();
+    }
+
+    this.timekeeping.update(this.remainingTime);
 
     // get the lowest element on the screen
     var lowest = this.lowestElementFromScreen();
@@ -49,6 +66,8 @@ var Game = function(events) {
         this.registry = this.viewer.get('elementRegistry');
         this.modeling = this.viewer.get('modeling');
         this.startTime = Date.now();
+        this.remainingTime = INITIAL_TIME;
+        this.lastUpdate = Date.now();
         progress();
       }
     });
@@ -96,6 +115,12 @@ var Game = function(events) {
       }
     }
   });
+};
+
+Game.prototype.gameOver = function() {
+  this.running = false;
+  this.container.innerHTML = '';
+  this.events.emit('game.finish', Math.round(-this.viewer.get('canvas').viewbox().y));
 };
 
 Game.prototype.lowestElementFromScreen = function() {

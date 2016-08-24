@@ -118,6 +118,15 @@ h3 {
   transform: scale(1.5);
 }
 
+.timekeeping {
+  position: fixed;
+  color: white;
+  bottom: 30px;
+  right: 30px;
+  font-size: 45px;
+  text-shadow: 1px 1px 1px black;
+}
+
 .djs-container [fill="#ffffff"] {
   fill: #333;
 }
