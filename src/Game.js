@@ -7,6 +7,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
+
 var Game = function(events) {
   this.container = document.createElement('div');
   this.container.className = 'game-container';
@@ -20,9 +21,17 @@ var Game = function(events) {
       return;
     }
 
+    // get the lowest element on the screen
+    var lowest = this.lowestElementFromScreen();
+
+    var distanceDelta = Math.pow(lowest / 2, 1.12) / 100;
+    if(lowest <= 0) {
+      distanceDelta = 0;
+    }
+
     // scroll up
     var currentBox = this.viewer.get('canvas').viewbox();
-    currentBox.y -= 1;
+    currentBox.y -= distanceDelta;
 
     this.viewer.get('canvas').viewbox(currentBox);
     this.viewer.get('canvas').zoom(1);
@@ -113,6 +122,29 @@ var Game = function(events) {
       }
     }
   });
+};
+
+Game.prototype.lowestElementFromScreen = function() {
+  var screenBox = this.viewer.get('canvas').viewbox();
+
+  // x, y, width, height
+  var lowerEdge = screenBox.y + screenBox.height;
+
+  var lowest = Infinity;
+
+  // iterate over all elements in the scene
+  this.viewer.get('elementRegistry').forEach(element => {
+    if(element.businessObject.$instanceOf('bpmn:FlowNode')) {
+      var lowerElementEdge = element.y + element.height;
+
+      var distanceFromLowerEdge = lowerEdge - lowerElementEdge;
+
+      lowest = Math.min(lowest, distanceFromLowerEdge);
+    }
+  });
+
+  return lowest;
+
 };
 
 module.exports = Game;
