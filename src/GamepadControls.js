@@ -29,20 +29,14 @@ var Controls = function(events) {
 
     var gamepads = [];
     for(var i = 0; i < gamepadList.length; i++) {
-      if(gamepadList[i].id.indexOf('ATRAK') > -1) {
+      if(gamepadList[i] && gamepadList[i].id.indexOf('ATRAK') > -1) {
         gamepads.push(gamepadList[i]);
       }
     }
 
-    // gamepads = gamepads.filter(function(gamepad) {
-    //   return gamepad.id.indexOf('ATRAK');
-    // });
-
-    console.log('gamepads', gamepads);
 
     for(var i = 0; i < gamepads.length; i++) {
       var gp = gamepads[i];
-      console.log(gp);
       if(gp) {
         var realCoordinates = calculateCoords(gp.axes[0], gp.axes[1]);
         if(!this.markers[i]) {

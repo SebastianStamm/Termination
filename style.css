@@ -35,7 +35,7 @@ body:after {
   mix-blend-mode: multiply;
   opacity: 1;
   pointer-events: none;
-  background: repeat url(./img/screen-pattern.gif);
+  /*background: repeat url(./img/screen-pattern.gif);*/
 }
 
 h1,
