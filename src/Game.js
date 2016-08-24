@@ -1,7 +1,5 @@
 var Modeler = require('bpmn-js/lib/Modeler');
 
-var Magazine = require('./Magazine');
-
 Modeler.prototype._modules = [
   require('bpmn-js/lib/core'),
   require('bpmn-js/lib/features/modeling')
@@ -63,34 +61,10 @@ var Game = function(events) {
     events.emit('game.abort');
   });
 
-  events.on('button3.pressed', data => {
-    if(this.magazine[data.player] && !this.magazine[data.player].reloading) {
-      events.emit('reload.start', data);
-      this.magazine[data.player].reloading = true;
-      window.setTimeout(() => {
-        this.magazine[data.player].reload();
-        this.magazine[data.player].reloading = false;
-      }, 500);
-    }
-  });
-
-  this.magazine = [];
   events.on('shot.fired', (data) => {
 
     if(this.running) {
 
-      // check magazine
-      if(typeof this.magazine[data.player] === 'undefined') {
-        this.magazine[data.player] = new Magazine(10);
-      }
-
-      if(this.magazine[data.player].isEmpty() || this.magazine[data.player].reloading) {
-        console.log('magazine is empty or reloading');
-        events.emit('magazine.empty', data);
-        return;
-      }
-
-      this.magazine[data.player].shoot();
       events.emit('magazine.shoot', data);
 
       var objHit = document.elementFromPoint(data.at.x, data.at.y);
