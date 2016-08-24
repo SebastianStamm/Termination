@@ -1,7 +1,7 @@
 var fs = require('fs');
-var xml = fs.readFileSync(__dirname + '/../levels/level1.bpmn', 'utf8');
+var xml = fs.readFileSync(__dirname + '/../levels/start.bpmn', 'utf8');
 
-var test = fs.readFileSync(__dirname + '/../levels/termination.json', 'utf8');
+// var test = fs.readFileSync(__dirname + '/../levels/termination.json', 'utf8');
 
 var templates = require('./templates');
 
@@ -54,7 +54,8 @@ var Highscore = function(events) {
 Highscore.prototype.startGame = function() {
   this.container.style.display = 'none';
   this.startTime = Date.now();
-  this.events.emit('game.start', JSON.parse(test));
+  // this.events.emit('game.start', JSON.parse(test));
+  this.events.emit('game.start', xml);
 };
 
 module.exports = Highscore;

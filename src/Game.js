@@ -28,13 +28,13 @@ var Game = function(events) {
     this.viewer.get('canvas').zoom(1);
 
     requestAnimationFrame(progress);
-  }
+  };
 
   events.on('game.start', (gameData) => {
     this.gameData = gameData;
     this.viewer = new Modeler({ container: this.container });
     window.c = this.viewer.get('canvas');
-    this.viewer.importXML(gameData.xml, (err) => {
+    this.viewer.importXML(gameData, (err) => {
       if (err) {
         alert('Oh no!! ' + err);
       } else {
