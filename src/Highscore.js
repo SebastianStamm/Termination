@@ -11,7 +11,7 @@ var Highscore = function(events) {
   this.container.className = 'container';
   document.body.appendChild(this.container);
 
-  this.highscore = 0;
+  this.highscore = window.localStorage.getItem('highscore') && parseInt(window.localStorage.getItem('highscore')) || 0;
 
   this.container.innerHTML = templates('game');
   document.getElementById('yourTime').style.display = 'none';
@@ -25,6 +25,7 @@ var Highscore = function(events) {
     var endTime = Date.now();
     // document.getElementById('latest').innerText = (endTime - this.startTime) / 1000 + 's';
     document.getElementById('latest').innerText = score;
+    document.getElementById('score').innerText = this.highscore;
     this.container.style.display = 'block';
     document.getElementById('yourTime').style.display = 'block';
     document.getElementById('fastestTime').style.display = 'block';
@@ -32,6 +33,8 @@ var Highscore = function(events) {
     if(score > this.highscore) {
       this.highscore = score;
       document.getElementById('score').innerText = score;
+
+      window.localStorage.setItem('highscore', score);
     }
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
