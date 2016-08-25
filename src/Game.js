@@ -7,17 +7,19 @@ var startLevel = fs.readFileSync(__dirname + '/../levels/start.bpmn', 'utf8');
 
 var sections = [
   fs.readFileSync(__dirname + '/../levels/unexpected_tasks.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/viele_tasks_fun.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_2.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/many_data_elements_tricky.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/multi_instance_orgie.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/tasks_mit_boundary_events_kurz.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/viele_events_schwer_1.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/viele_events_schwer_2.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/viele_tasks_schwer.bpmn', 'utf8'),
-  // fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/arrow.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/tree.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/viele_tasks_fun.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_2.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/many_data_elements_tricky.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/multi_instance_orgie.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/tasks_mit_boundary_events_kurz.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/viele_events_schwer_1.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/viele_events_schwer_2.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/viele_tasks_schwer.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8')
 ];
 
 Modeler.prototype._modules = [

@@ -127,8 +127,9 @@ h3 {
   color: white;
   bottom: 30px;
   right: 30px;
-  font-size: 45px;
+  font-size: 135px;
   text-shadow: 1px 1px 1px black;
+  pointer-events: none;
 }
 
 .djs-container [fill="#ffffff"] {
