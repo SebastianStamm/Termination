@@ -53,15 +53,24 @@ var Highscore = function(events) {
     //   document.getElementById('score').innerText = score;
 
     // }
-    this.highscore.push({name: '', score: Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter)});
-    this.highscore.sort(function(a,b) {
-      return b.score - a.score;
-    });
-
-    window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
+
+      var newEntry = {name: '', score: Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter)};
+      this.highscore.push(newEntry);
+      this.highscore.sort(function(a,b) {
+        return b.score - a.score;
+      });
+
+      if(this.highscore.indexOf(newEntry) < 10) {
+        var name = window.prompt('You got a new Highscore! Please enter your name:');
+        newEntry.name = name.substr(0, 6);
+      }
+
+      window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+
+
         this.scoreboard.style.display = 'none';
         this.showHighscore();
       });
@@ -76,7 +85,7 @@ Highscore.prototype.showHighscore = function() {
 
   for(var i = 0; i < 10; i++) {
     document.getElementById('score' + i).textContent = this.highscore[i] && this.highscore[i].score || 0;
-    document.getElementById('name' + i).textContent = 'AAA';
+    document.getElementById('name' + i).textContent = this.highscore[i] && this.highscore[i].name || 'AAA';
   }
 
   window.setTimeout(() => {
