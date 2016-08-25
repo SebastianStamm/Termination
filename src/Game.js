@@ -6,17 +6,18 @@ var fs = require('fs');
 var startLevel = fs.readFileSync(__dirname + '/../levels/start.bpmn', 'utf8');
 
 var sections = [
-  fs.readFileSync(__dirname + '/../levels/viele_tasks_fun.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_2.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/many_data_elements_tricky.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/multi_instance_orgie.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/tasks_mit_boundary_events_kurz.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_events_schwer_1.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_events_schwer_2.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_tasks_schwer.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/unexpected_tasks.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/viele_tasks_fun.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_2.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/many_data_elements_tricky.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/multi_instance_orgie.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/tasks_mit_boundary_events_kurz.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/viele_events_schwer_1.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/viele_events_schwer_2.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/viele_tasks_schwer.bpmn', 'utf8'),
+  // fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8'),
 ];
 
 Modeler.prototype._modules = [
@@ -24,7 +25,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 120 * 1000;
+var INITIAL_TIME = 30 * 1000;
 
 var Game = function(events) {
   this.events = events;
@@ -145,6 +146,8 @@ var Game = function(events) {
              el.businessObject.eventDefinitions[0].$type === 'bpmn:TimerEventDefinition' &&
              el.businessObject.eventDefinitions[0].timeDuration &&
              el.businessObject.eventDefinitions[0].timeDuration.body) {
+
+            this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000;
 
             window.setTimeout(() => {
               console.log('appending another section');
