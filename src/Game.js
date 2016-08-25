@@ -84,7 +84,6 @@ var Game = function(events) {
         // create the next section of the level for smooth game flow
         this.appendSection();
 
-
         progress();
       }
     });
@@ -127,6 +126,22 @@ var Game = function(events) {
         var dataElementId = objHit.getAttribute('data-element-id');
         if(dataElementId) {
           var el = viewer.get('elementRegistry').get(dataElementId);
+
+          // trigger new section if timer start event was killed
+          if(el.type === 'bpmn:IntermediateCatchEvent' &&
+             el.businessObject &&
+             el.businessObject.eventDefinitions &&
+             el.businessObject.eventDefinitions[0] &&
+             el.businessObject.eventDefinitions[0].$type === 'bpmn:TimerEventDefinition' &&
+             el.businessObject.eventDefinitions[0].timeDuration &&
+             el.businessObject.eventDefinitions[0].timeDuration.body) {
+
+            console.log('appending another section');
+            this.appendSection();
+
+          }
+
+
           if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
             viewer.get('modeling').removeElements([viewer.get('elementRegistry').get(dataElementId)]);
             events.emit('element.destroyed', {
@@ -156,6 +171,8 @@ Game.prototype.appendSection = function() {
     }
   });
 
+  console.log('finalElement', finalElement);
+
   var xml = sections[Math.floor(Math.random() * sections.length)];
 
   var viewer = new Modeler({ container: this.container });
@@ -164,7 +181,8 @@ Game.prototype.appendSection = function() {
 
   viewer.importXML(xml, (err) => {
     if (err) {
-      alert('Oh no!! ' + err);
+      // alert('Oh no!! ' + err);
+      throw err;
     } else {
 
       // get the first element
@@ -181,9 +199,13 @@ Game.prototype.appendSection = function() {
         }
       });
 
+      console.log('firstElement', firstElement);
+
+      var otherViewbox = lastSection.get('canvas').viewbox();
+
       var vector = {
-        x: firstElement.x - finalElement.x,
-        y: firstElement.y - finalElement.y
+        x: firstElement.x - finalElement.x + otherViewbox.x,
+        y: firstElement.y - finalElement.y + otherViewbox.y
       };
 
       var currentBox = viewer.get('canvas').viewbox();
