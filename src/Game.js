@@ -7,7 +7,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 15 * 1000;
+var INITIAL_TIME = 30 * 1000;
 
 var Game = function(events) {
   this.events = events;
@@ -39,7 +39,7 @@ var Game = function(events) {
     // get the lowest element on the screen
     var lowest = this.lowestElementFromScreen();
 
-    var distanceDelta = Math.pow(lowest / 2, 1.12) / 100;
+    var distanceDelta = Math.pow(lowest / 2, 1.12) / 100 * timeSinceLastUpdate / 16.6;
     if(lowest <= 0) {
       distanceDelta = 0;
     }

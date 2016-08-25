@@ -6,8 +6,13 @@ var Particles = function(events) {
 
   window.particles = this.particles;
 
+  var lastUpdate = Date.now();
+
   var animate = () => {
     var now = Date.now();
+    var delta = now - lastUpdate;
+    lastUpdate = now;
+
     this.particles.forEach(particle => {
 
       if(now - particle.created > 2000) {
@@ -15,10 +20,10 @@ var Particles = function(events) {
         this.particles.splice(this.particles.indexOf(particle), 1);
       }
 
-      particle.pos.x += particle.vel.x;
-      particle.pos.y += particle.vel.y;
+      particle.pos.x += particle.vel.x * delta / 16.6;
+      particle.pos.y += particle.vel.y * delta / 16.6;
 
-      particle.vel.y += 1;
+      particle.vel.y +=  delta / 16.6;
 
       particle.node.style.left = particle.pos.x + 'px';
       particle.node.style.top = particle.pos.y + 'px';
