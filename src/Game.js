@@ -2,12 +2,19 @@ var Modeler = require('bpmn-js/lib/Modeler');
 
 var Timekeeping = require('./Timekeeping');
 
+var fs = require('fs');
+var startLevel = fs.readFileSync(__dirname + '/../levels/start.bpmn', 'utf8');
+
+var sections = [
+  fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8')
+];
+
 Modeler.prototype._modules = [
   require('bpmn-js/lib/core'),
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 30 * 1000;
+var INITIAL_TIME = 300 * 1000;
 
 var Game = function(events) {
   this.events = events;
@@ -16,6 +23,9 @@ var Game = function(events) {
   document.body.appendChild(this.container);
 
   this.timekeeping = new Timekeeping();
+
+  this.viewers = [];
+
 
   this.running = false;
   // this.startTime = 0;
@@ -45,20 +55,22 @@ var Game = function(events) {
     }
 
     // scroll up
-    var currentBox = this.viewer.get('canvas').viewbox();
-    currentBox.y -= distanceDelta;
+    this.viewers.forEach(viewer => {
+      var currentBox = viewer.get('canvas').viewbox();
+      currentBox.y -= distanceDelta;
 
-    this.viewer.get('canvas').viewbox(currentBox);
-    this.viewer.get('canvas').zoom(1);
+      viewer.get('canvas').viewbox(currentBox);
+      viewer.get('canvas').zoom(1);
+    });
 
     requestAnimationFrame(progress);
   };
 
-  events.on('game.start', (gameData) => {
-    this.gameData = gameData;
+  events.on('game.start', () => {
     this.viewer = new Modeler({ container: this.container });
+    this.viewers.push(this.viewer);
     window.c = this.viewer.get('canvas');
-    this.viewer.importXML(gameData, (err) => {
+    this.viewer.importXML(startLevel, (err) => {
       if (err) {
         alert('Oh no!! ' + err);
       } else {
@@ -68,6 +80,11 @@ var Game = function(events) {
         this.startTime = Date.now();
         this.remainingTime = INITIAL_TIME;
         this.lastUpdate = Date.now();
+
+        // create the next section of the level for smooth game flow
+        this.appendSection();
+
+
         progress();
       }
     });
@@ -86,33 +103,55 @@ var Game = function(events) {
 
       events.emit('magazine.shoot', data);
 
-      var objHit = document.elementFromPoint(data.at.x, data.at.y);
-      while(objHit && !objHit.getAttribute('data-element-id') && objHit.parentNode) {
-        objHit = objHit.parentNode;
-        if(objHit === document) {
-          return;
-        }
-      }
-      if(!objHit) {
-        return;
-      }
-      var dataElementId = objHit.getAttribute('data-element-id');
-      if(dataElementId) {
-        var el = this.registry.get(dataElementId);
-        if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
-          this.modeling.removeElements([this.registry.get(dataElementId)]);
-          events.emit('element.destroyed', {
-            id: dataElementId,
-            shot: data
-          });
-          if(Object.keys(this.registry._elements).length === 1) {
-            // if only the process itself remains
-            this.running = false;
-            this.container.innerHTML = '';
-            events.emit('game.finish');
+      // hide all viewers
+      this.viewers.forEach(viewer => {
+        viewer.container.style.display = 'none';
+      });
+
+      // try every viewer
+      this.viewers.forEach(viewer => {
+
+        viewer.container.style.display = 'block';
+
+        var objHit = document.elementFromPoint(data.at.x, data.at.y);
+
+        console.log(objHit);
+
+        while(objHit && !objHit.getAttribute('data-element-id') && objHit.parentNode) {
+          objHit = objHit.parentNode;
+          if(objHit === document) {
+            return;
           }
         }
-      }
+        if(!objHit) {
+          return;
+        }
+        var dataElementId = objHit.getAttribute('data-element-id');
+        if(dataElementId) {
+          var el = viewer.get('elementRegistry').get(dataElementId);
+          if(el.children && el.children.length === 0 && el.type !== 'bpmn:Process') {
+            viewer.get('modeling').removeElements([viewer.get('elementRegistry').get(dataElementId)]);
+            events.emit('element.destroyed', {
+              id: dataElementId,
+              shot: data
+            });
+          }
+        }
+      });
+    }
+  });
+};
+
+Game.prototype.appendSection = function() {
+  var xml = sections[Math.floor(Math.random() * sections.length)];
+
+  var viewer = new Modeler({ container: this.container });
+
+  this.viewers.push(viewer);
+
+  viewer.importXML(xml, (err) => {
+    if (err) {
+      alert('Oh no!! ' + err);
     }
   });
 };
@@ -120,26 +159,31 @@ var Game = function(events) {
 Game.prototype.gameOver = function() {
   this.running = false;
   this.container.innerHTML = '';
-  this.events.emit('game.finish', Math.round(-this.viewer.get('canvas').viewbox().y));
+  this.events.emit('game.finish', Math.round(-this.viewers[0].get('canvas').viewbox().y));
+  this.viewers = [];
 };
 
 Game.prototype.lowestElementFromScreen = function() {
-  var screenBox = this.viewer.get('canvas').viewbox();
-
-  // x, y, width, height
-  var lowerEdge = screenBox.y + screenBox.height;
-
   var lowest = Infinity;
 
-  // iterate over all elements in the scene
-  this.viewer.get('elementRegistry').forEach(element => {
-    if(element.businessObject.$instanceOf('bpmn:FlowNode')) {
-      var lowerElementEdge = element.y + element.height;
+  this.viewers.forEach(viewer => {
+    var screenBox = viewer.get('canvas').viewbox();
 
-      var distanceFromLowerEdge = lowerEdge - lowerElementEdge;
+    // x, y, width, height
+    var lowerEdge = screenBox.y + screenBox.height;
 
-      lowest = Math.min(lowest, distanceFromLowerEdge);
-    }
+
+    // iterate over all elements in the scene
+    viewer.get('elementRegistry').forEach(element => {
+      if(element.businessObject.$instanceOf('bpmn:FlowNode')) {
+        var lowerElementEdge = element.y + element.height;
+
+        var distanceFromLowerEdge = lowerEdge - lowerElementEdge;
+
+        lowest = Math.min(lowest, distanceFromLowerEdge);
+      }
+    });
+
   });
 
   return lowest;
