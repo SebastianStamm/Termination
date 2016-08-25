@@ -6,7 +6,7 @@ var fs = require('fs');
 var startLevel = fs.readFileSync(__dirname + '/../levels/start.bpmn', 'utf8');
 
 var sections = [
-  fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8')
+  fs.readFileSync(__dirname + '/../levels/viele_tasks_fun.bpmn', 'utf8')
 ];
 
 Modeler.prototype._modules = [
@@ -115,8 +115,6 @@ var Game = function(events) {
 
         var objHit = document.elementFromPoint(data.at.x, data.at.y);
 
-        console.log(objHit);
-
         while(objHit && !objHit.getAttribute('data-element-id') && objHit.parentNode) {
           objHit = objHit.parentNode;
           if(objHit === document) {
@@ -143,6 +141,21 @@ var Game = function(events) {
 };
 
 Game.prototype.appendSection = function() {
+
+  var lastSection = this.viewers[this.viewers.length - 1];
+
+  var finalElement;
+  lastSection.get('elementRegistry').forEach(element => {
+    if(element.type === 'bpmn:IntermediateCatchEvent' &&
+       element.businessObject &&
+       element.businessObject.eventDefinitions &&
+       element.businessObject.eventDefinitions[0] &&
+       element.businessObject.eventDefinitions[0].$type === 'bpmn:TimerEventDefinition' &&
+       !element.businessObject.eventDefinitions[0].timeDuration) {
+      finalElement = element;
+    }
+  });
+
   var xml = sections[Math.floor(Math.random() * sections.length)];
 
   var viewer = new Modeler({ container: this.container });
@@ -152,6 +165,33 @@ Game.prototype.appendSection = function() {
   viewer.importXML(xml, (err) => {
     if (err) {
       alert('Oh no!! ' + err);
+    } else {
+
+      // get the first element
+      var firstElement;
+      viewer.get('elementRegistry').forEach(element => {
+        if(element.type === 'bpmn:IntermediateCatchEvent' &&
+           element.businessObject &&
+           element.businessObject.eventDefinitions &&
+           element.businessObject.eventDefinitions[0] &&
+           element.businessObject.eventDefinitions[0].$type === 'bpmn:TimerEventDefinition' &&
+           element.businessObject.eventDefinitions[0].timeDuration &&
+           element.businessObject.eventDefinitions[0].timeDuration.body) {
+          firstElement = element;
+        }
+      });
+
+      var vector = {
+        x: firstElement.x - finalElement.x,
+        y: firstElement.y - finalElement.y
+      };
+
+      var currentBox = viewer.get('canvas').viewbox();
+      currentBox.x = vector.x;
+      currentBox.y = vector.y;
+
+      viewer.get('canvas').viewbox(currentBox);
+
     }
   });
 };
