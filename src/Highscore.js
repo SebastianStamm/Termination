@@ -11,7 +11,12 @@ var Highscore = function(events) {
   document.body.appendChild(this.scoreboard);
   this.scoreboard.style.display = 'none';
 
-  this.highscore = window.localStorage.getItem('highscore') && parseInt(JSON.parse(window.localStorage.getItem('highscore'))) || [];
+  this.nameboard = document.createElement('div');
+  this.nameboard.className = 'nameboard';
+  document.body.appendChild(this.nameboard);
+  this.nameboard.style.display = 'none';
+
+  this.highscore = window.localStorage.getItem('highscore') && JSON.parse(window.localStorage.getItem('highscore')) || [];
 
   if(typeof this.highscore === 'number') {
     this.highscore = [{score: this.highscore}];
@@ -19,6 +24,7 @@ var Highscore = function(events) {
 
   this.container.innerHTML = templates('game');
   this.scoreboard.innerHTML = templates('scoreboard');
+  this.nameboard.innerHTML = templates('nameboard');
   // document.getElementById('yourTime').style.display = 'none';
   // document.getElementById('fastestTime').style.display = 'none';
 
@@ -35,9 +41,6 @@ var Highscore = function(events) {
 
   this.events.on('game.finish', (score) => {
     var endTime = Date.now();
-    // document.getElementById('latest').innerText = (endTime - this.startTime) / 1000 + 's';
-    // document.getElementById('latest').innerText = score;
-    // document.getElementById('score').innerText = this.highscore;
     this.scoreboard.style.display = 'block';
 
     document.getElementById('hit_elements').innerText = this.hitCounter;
@@ -45,14 +48,6 @@ var Highscore = function(events) {
     document.getElementById('hit_ratio').innerText = Math.round(this.hitCounter / (this.shotCounter) * 100) + '%';
     document.getElementById('your_score').innerText = Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter);
 
-    // document.getElementById('yourTime').style.display = 'block';
-    // document.getElementById('fastestTime').style.display = 'block';
-
-    // if(score > this.highscore) {
-    //   this.highscore = score;
-    //   document.getElementById('score').innerText = score;
-
-    // }
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
@@ -64,19 +59,40 @@ var Highscore = function(events) {
       });
 
       if(this.highscore.indexOf(newEntry) < 10) {
-        var name = window.prompt('You got a new Highscore! Please enter your name:');
-        newEntry.name = name.substr(0, 6);
-      }
-
-      window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
-
-
+        this.scoreboard.style.display = 'none';
+        this.showNameBoard(newEntry);
+      } else {
         this.scoreboard.style.display = 'none';
         this.showHighscore();
+      }
+
       });
     }, 2000);
   });
 
+};
+
+Highscore.prototype.showNameBoard = function(newEntry) {
+
+  this.nameboard.style.display = 'block';
+  var name = ''
+  var evtHandler = (data) => {
+    var objHit = document.elementFromPoint(data.at.x, data.at.y);
+
+    if(objHit.parentNode.id === 'letterboard') {
+      name += objHit.textContent;
+      document.getElementById('enteredName').textContent = name;
+      if(name.length === 3) {
+        this.events.removeListener('shot.fired', evtHandler);
+        newEntry.name = name;
+        document.getElementById('enteredName').textContent = '___';
+        this.nameboard.style.display = 'none';
+        this.showHighscore();
+        window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+      }
+    }
+  }
+  this.events.on('shot.fired', evtHandler);
 };
 
 Highscore.prototype.showHighscore = function() {

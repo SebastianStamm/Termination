@@ -32,7 +32,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 3 * 1000;
+var INITIAL_TIME = 40 * 1000;
 
 var Game = function(events) {
   this.events = events;
@@ -60,12 +60,18 @@ var Game = function(events) {
 
     if(this.remainingTime < 0) {
       this.gameOver();
+      return;
     }
 
     this.timekeeping.update(this.remainingTime);
 
     // get the lowest element on the screen
     var lowest = this.lowestElementFromScreen();
+
+    if(lowest === Infinity) {
+      this.gameOver();
+      return;
+    }
 
     if(lowest > 700) {
       var distanceDelta = Math.pow(lowest / 2, 1.30) / 100 * timeSinceLastUpdate / 16.6;
@@ -210,6 +216,9 @@ Game.prototype.appendSection = function() {
 
   var xml = sections[this.viewers.length - 1];
   // var xml = sections[this.viewers.length - 1];
+  if(!xml) {
+    return;
+  }
 
   var viewer = new Modeler({ container: this.container });
 
