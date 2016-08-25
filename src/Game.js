@@ -3,27 +3,28 @@ var Modeler = require('bpmn-js/lib/Modeler');
 var Timekeeping = require('./Timekeeping');
 
 var fs = require('fs');
-var startLevel = fs.readFileSync(__dirname + '/../levels/start.bpmn', 'utf8');
+var startLevel = fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8');
 
 var sections = [
-  fs.readFileSync(__dirname + '/../levels/unexpected_tasks.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/arrow.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/tree.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_tasks_fun.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/langer_baustein_mit_tasks_und_events_2.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/eskalation.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/many_data_elements_tricky.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/multi_instance_orgie.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/tasks_mit_boundary_events_kurz.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_events_schwer_1.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_events_schwer_2.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/viele_tasks_schwer.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/subprocesses.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/ez_lvl5.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/cards.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/ezlvl8.bpmn', 'utf8')
+  fs.readFileSync(__dirname + '/../levels/2_subprocesses.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/3_activities_große_abstaende_easy.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/4_langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/5_arrow.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/6_unexpected_tasks.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/7_viele_tasks_fun.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/8_ezlvl8.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/9_many_data_elements_tricky.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/10_tasks_mit_boundary_events_kurz.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/11_tree.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/12_langer_baustein_mit_tasks_und_events_2.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/13_viele_tasks_schwer.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/14_cards.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/15_viele_events_schwer_2.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/16_eskalation.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/17_ez_lvl5.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/18_multi_instance_orgie.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/19_viele_events_schwer_1.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/20_super-mario.bpmn', 'utf8')
 ];
 
 Modeler.prototype._modules = [
@@ -31,7 +32,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 30 * 1000;
+var INITIAL_TIME = 3 * 1000;
 
 var Game = function(events) {
   this.events = events;
@@ -92,6 +93,9 @@ var Game = function(events) {
   };
 
   events.on('game.start', () => {
+    // HACK to keep the timekeeper from showing
+    this.remainingTime = INITIAL_TIME;
+
     this.viewer = new Modeler({ container: this.container });
     this.viewers.push(this.viewer);
     window.c = this.viewer.get('canvas');
@@ -163,7 +167,7 @@ var Game = function(events) {
 
 
             // scale the time addition with the level progress
-            this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000 / Math.pow(this.viewers.length - 1, 1.2);
+            this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000/* / Math.pow(this.viewers.length - 1, 1.2)*/;
 
             window.setTimeout(() => {
               console.log('appending another section');
@@ -204,7 +208,7 @@ Game.prototype.appendSection = function() {
 
   console.log('finalElement', finalElement);
 
-  var xml = sections[Math.floor(Math.random() * sections.length)];
+  var xml = sections[this.viewers.length - 1];
   // var xml = sections[this.viewers.length - 1];
 
   var viewer = new Modeler({ container: this.container });
@@ -255,6 +259,10 @@ Game.prototype.gameOver = function() {
   this.container.innerHTML = '';
   this.events.emit('game.finish', Math.round(-this.viewers[0].get('canvas').viewbox().y));
   this.viewers = [];
+
+  // hack to keep the timekeeper from showing 1 very quickly on restart
+  this.timekeeping.update(30000);
+
 };
 
 Game.prototype.lowestElementFromScreen = function() {

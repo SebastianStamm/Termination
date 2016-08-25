@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.0.0">
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:subProcess id="SubProcess_19qnc2a">
+      <bpmn:incoming>SequenceFlow_06kxzsm</bpmn:incoming>
+    </bpmn:subProcess>
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0lzx1vx">
+      <bpmn:outgoing>SequenceFlow_06kxzsm</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">20</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_06kxzsm" sourceRef="IntermediateCatchEvent_0lzx1vx" targetRef="SubProcess_19qnc2a" />
+    <bpmn:subProcess id="SubProcess_1jd6nw6" />
+    <bpmn:subProcess id="SubProcess_0ea4wir" />
+    <bpmn:subProcess id="SubProcess_0ueau5e" />
+    <bpmn:subProcess id="SubProcess_1gpsg6r" />
+    <bpmn:subProcess id="SubProcess_0yazts2" />
+    <bpmn:subProcess id="SubProcess_0a8noa5" />
+    <bpmn:subProcess id="SubProcess_1j2we5s" />
+    <bpmn:subProcess id="SubProcess_1usz26v" />
+    <bpmn:subProcess id="SubProcess_1s72o3p" />
+    <bpmn:subProcess id="SubProcess_00imqaj" />
+    <bpmn:subProcess id="SubProcess_0yxcxhf" />
+    <bpmn:subProcess id="SubProcess_1ggz0tq" />
+    <bpmn:subProcess id="SubProcess_1t4796b">
+      <bpmn:outgoing>SequenceFlow_0jhh1r5</bpmn:outgoing>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="SequenceFlow_0jhh1r5" sourceRef="SubProcess_1t4796b" targetRef="IntermediateCatchEvent_17gh6gq" />
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_17gh6gq">
+      <bpmn:incoming>SequenceFlow_0jhh1r5</bpmn:incoming>
+      <bpmn:timerEventDefinition />
+    </bpmn:intermediateCatchEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="SubProcess_19qnc2a_di" bpmnElement="SubProcess_19qnc2a" isExpanded="true">
+        <dc:Bounds x="589" y="438" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_0lzx1vx_di" bpmnElement="IntermediateCatchEvent_0lzx1vx">
+        <dc:Bounds x="746" y="784" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="719" y="820" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_06kxzsm_di" bpmnElement="SequenceFlow_06kxzsm">
+        <di:waypoint xsi:type="dc:Point" x="764" y="784" />
+        <di:waypoint xsi:type="dc:Point" x="764" y="711" />
+        <di:waypoint xsi:type="dc:Point" x="764" y="711" />
+        <di:waypoint xsi:type="dc:Point" x="764" y="638" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="725" y="686" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SubProcess_1jd6nw6_di" bpmnElement="SubProcess_1jd6nw6" isExpanded="true">
+        <dc:Bounds x="228" y="93" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0ea4wir_di" bpmnElement="SubProcess_0ea4wir" isExpanded="true">
+        <dc:Bounds x="589" y="218" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0ueau5e_di" bpmnElement="SubProcess_0ueau5e" isExpanded="true">
+        <dc:Bounds x="348" y="-113" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1gpsg6r_di" bpmnElement="SubProcess_1gpsg6r" isExpanded="true">
+        <dc:Bounds x="960" y="93" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0yazts2_di" bpmnElement="SubProcess_0yazts2" isExpanded="true">
+        <dc:Bounds x="831" y="-113" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0a8noa5_di" bpmnElement="SubProcess_0a8noa5" isExpanded="true">
+        <dc:Bounds x="589" y="-325" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1j2we5s_di" bpmnElement="SubProcess_1j2we5s" isExpanded="true">
+        <dc:Bounds x="589" y="-545" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1usz26v_di" bpmnElement="SubProcess_1usz26v" isExpanded="true">
+        <dc:Bounds x="589" y="-763" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1s72o3p_di" bpmnElement="SubProcess_1s72o3p" isExpanded="true">
+        <dc:Bounds x="215" y="-967" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_00imqaj_di" bpmnElement="SubProcess_00imqaj" isExpanded="true">
+        <dc:Bounds x="589" y="-967" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0yxcxhf_di" bpmnElement="SubProcess_0yxcxhf" isExpanded="true">
+        <dc:Bounds x="960" y="-967" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1ggz0tq_di" bpmnElement="SubProcess_1ggz0tq" isExpanded="true">
+        <dc:Bounds x="215" y="-1184" width="1089" height="198" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_1t4796b_di" bpmnElement="SubProcess_1t4796b" isExpanded="true">
+        <dc:Bounds x="215" y="-1398" width="1085" height="206" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0jhh1r5_di" bpmnElement="SequenceFlow_0jhh1r5">
+        <di:waypoint xsi:type="dc:Point" x="764" y="-1398" />
+        <di:waypoint xsi:type="dc:Point" x="764" y="-1478" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="734" y="-1448" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_17gh6gq_di" bpmnElement="IntermediateCatchEvent_17gh6gq">
+        <dc:Bounds x="746" y="-1514" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="719" y="-1478" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
