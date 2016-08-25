@@ -132,6 +132,18 @@ h3 {
   pointer-events: none;
 }
 
+.timekeeping-big {
+  color: white;
+  font-size: 300px;
+  position: fixed;
+  text-shadow: 0 0 20px #e0fec9, 10px -10px 30px #8cfe85, -20px -20px 40px #79ff34, 20px -30px 35px #10ec0c, -20px -40px 40px #06cd15, 0 -50px 65px #189716, 10px -70px 70px #1c450e;
+  width: 100%;
+  margin-top: 50px;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
 .djs-container [fill="#ffffff"] {
   fill: #333;
 }

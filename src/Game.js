@@ -19,7 +19,11 @@ var sections = [
   fs.readFileSync(__dirname + '/../levels/viele_events_schwer_1.bpmn', 'utf8'),
   fs.readFileSync(__dirname + '/../levels/viele_events_schwer_2.bpmn', 'utf8'),
   fs.readFileSync(__dirname + '/../levels/viele_tasks_schwer.bpmn', 'utf8'),
-  fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8')
+  fs.readFileSync(__dirname + '/../levels/subprocesses.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/activities_große_abstaende_easy.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/ez_lvl5.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/cards.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/ezlvl8.bpmn', 'utf8')
 ];
 
 Modeler.prototype._modules = [
@@ -35,7 +39,7 @@ var Game = function(events) {
   this.container.className = 'game-container';
   document.body.appendChild(this.container);
 
-  this.timekeeping = new Timekeeping();
+  this.timekeeping = new Timekeeping(events);
 
   this.viewers = [];
 
@@ -149,7 +153,9 @@ var Game = function(events) {
              el.businessObject.eventDefinitions[0].timeDuration &&
              el.businessObject.eventDefinitions[0].timeDuration.body) {
 
-            this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000;
+
+            // scale the time addition with the level progress
+            this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000 / Math.pow(this.viewers.length - 1, 1.2);
 
             window.setTimeout(() => {
               console.log('appending another section');
