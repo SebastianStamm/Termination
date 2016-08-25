@@ -66,7 +66,15 @@ var Game = function(events) {
     // get the lowest element on the screen
     var lowest = this.lowestElementFromScreen();
 
-    var distanceDelta = Math.pow(lowest / 2, 1.12) / 100 * timeSinceLastUpdate / 16.6;
+    if(lowest > 700) {
+      var distanceDelta = Math.pow(lowest / 2, 1.30) / 100 * timeSinceLastUpdate / 16.6;
+    } else if(lowest > 500) {
+      var distanceDelta = Math.pow(lowest / 2, 1.15) / 100 * timeSinceLastUpdate / 16.6;
+    } else {
+      var distanceDelta = Math.pow(lowest / 2, 1.12) / 100 * timeSinceLastUpdate / 16.6;
+    }
+
+
     if(lowest <= 0) {
       distanceDelta = 0;
     }
