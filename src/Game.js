@@ -58,7 +58,8 @@ var Game = function(events) {
     this.remainingTime -= timeSinceLastUpdate;
     this.lastUpdate = Date.now();
 
-    if(this.remainingTime < 0) {
+    if(this.remainingTime <= 0) {
+      this.remainingTime = 0;
       this.gameOver();
       return;
     }
@@ -266,7 +267,7 @@ Game.prototype.appendSection = function() {
 Game.prototype.gameOver = function() {
   this.running = false;
   this.container.innerHTML = '';
-  this.events.emit('game.finish', Math.round(-this.viewers[0].get('canvas').viewbox().y));
+  this.events.emit('game.finish', this.remainingTime);
   this.viewers = [];
 
   // hack to keep the timekeeper from showing 1 very quickly on restart

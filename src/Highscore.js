@@ -1,5 +1,21 @@
 var templates = require('./templates');
 
+var leftPad = function(number, digits) {
+  var str = '' + number;
+  while(str.length < digits) {
+    str = '0' + str;
+  }
+  return str;
+}
+
+var getRemaining = function(millis) {
+  return {
+    hundreds: Math.floor(millis / 10) % 100,
+    milliseconds: millis % 1000,
+    seconds: Math.floor(millis / 1000)
+  };
+
+}
 var Highscore = function(events) {
   this.events = events;
   this.container = document.createElement('div');
@@ -39,14 +55,19 @@ var Highscore = function(events) {
     this.startGame();
   });
 
-  this.events.on('game.finish', (score) => {
+  this.events.on('game.finish', (remainingTime) => {
     var endTime = Date.now();
     this.scoreboard.style.display = 'block';
 
     document.getElementById('hit_elements').innerText = this.hitCounter;
     document.getElementById('missed_shots').innerText = this.shotCounter - this.hitCounter;
     document.getElementById('hit_ratio').innerText = Math.round(this.hitCounter / (this.shotCounter) * 100) + '%';
-    document.getElementById('your_score').innerText = Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter);
+
+
+    var remaining = getRemaining(remainingTime);
+    document.getElementById('time_bonus').innerText = leftPad(remaining.seconds, 2) + ':' + leftPad(remaining.hundreds, 2);
+
+    document.getElementById('your_score').innerText = Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100);
 
 
     window.setTimeout(() => {
