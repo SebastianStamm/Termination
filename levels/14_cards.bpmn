@@ -24,7 +24,7 @@
     <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_0hjxs8d">
       <bpmn:outgoing>SequenceFlow_06zvys0</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">35</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">25</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_06zvys0" sourceRef="IntermediateThrowEvent_0hjxs8d" targetRef="SubProcess_0u6x3nj" />

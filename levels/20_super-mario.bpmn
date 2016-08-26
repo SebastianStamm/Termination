@@ -351,7 +351,7 @@
     <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1m5wog6">
       <bpmn:outgoing>SequenceFlow_1nsu4sn</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">90</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">60</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1nsu4sn" sourceRef="IntermediateThrowEvent_1m5wog6" targetRef="Task_17mbc93" />

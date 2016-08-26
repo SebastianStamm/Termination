@@ -138,7 +138,7 @@
       <bpmn:outgoing>SequenceFlow_1q0rjmd</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1chwf6n</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">25</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">20</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_060l2r6">

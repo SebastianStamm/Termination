@@ -4,7 +4,7 @@
     <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0kfde89">
       <bpmn:outgoing>SequenceFlow_1b021qd</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">40</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">30</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0q4rml8">

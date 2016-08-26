@@ -5,7 +5,7 @@
       <bpmn:outgoing>SequenceFlow_05d0585</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0ouz76p</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">20</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">15</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:task id="Task_1dkesff">

@@ -4,7 +4,7 @@
     <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_1l6y68c">
       <bpmn:outgoing>SequenceFlow_13xp158</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">10</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">7</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:dataStoreReference id="DataStoreReference_1lw0oo1" />
