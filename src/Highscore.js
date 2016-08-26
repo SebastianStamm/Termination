@@ -1,4 +1,5 @@
 var templates = require('./templates');
+var TWEEN = require('tween.js');
 
 var leftPad = function(number, digits) {
   var str = '' + number;
@@ -14,8 +15,30 @@ var getRemaining = function(millis) {
     milliseconds: millis % 1000,
     seconds: Math.floor(millis / 1000)
   };
-
 }
+
+var animate = function(element, start, end, rendering) {
+  var data = {t: start};
+  var tween = new TWEEN.Tween(data)
+    .to({ t: end }, 2000)
+    .easing(TWEEN.Easing.Cubic.InOut)
+    .onUpdate(function() {
+        if(rendering) {
+          element.textContent = rendering(Math.round(this.t));
+        } else {
+          element.textContent = Math.round(this.t);
+        }
+        // element.textContent = Math.round(this.t) + (suffix ? suffix : '');
+    })
+    .start();
+}
+
+function tweenanimation(time) {
+    requestAnimationFrame(tweenanimation);
+    TWEEN.update(time);
+}
+requestAnimationFrame(tweenanimation);
+
 var Highscore = function(events) {
   this.events = events;
   this.container = document.createElement('div');
@@ -59,21 +82,41 @@ var Highscore = function(events) {
     var endTime = Date.now();
     this.scoreboard.style.display = 'block';
 
-    document.getElementById('hit_elements').innerText = this.hitCounter;
-    document.getElementById('missed_shots').innerText = this.shotCounter - this.hitCounter;
-    document.getElementById('hit_ratio').innerText = Math.round(this.hitCounter / (this.shotCounter) * 100) + '%';
+    document.getElementById('hit_ratio').innerText = '100 %';
+
+    document.getElementById('missed_shots').textContent = '0';
+    document.getElementById('hit_elements').textContent = '0';
+    document.getElementById('your_score').textContent = '0';
+    document.getElementById('time_bonus').textContent = '00:00';
+
+    animate(document.getElementById('hit_elements'), 0, this.hitCounter);
+    animate(document.getElementById('your_score'), 0, 100 * this.hitCounter);
+    // document.getElementById('hit_elements').innerText = this.hitCounter;
+    window.setTimeout(() => {
+      animate(document.getElementById('missed_shots'), 0, this.shotCounter - this.hitCounter);
+      animate(document.getElementById('your_score'), 100 * this.hitCounter, Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter));
+      animate(document.getElementById('hit_ratio'), 100, Math.round(100 * this.hitCounter / this.shotCounter), text => text + ' %');
+      window.setTimeout(() => {
+        animate(document.getElementById('time_bonus'), 0, remainingTime, text => {
+          var remaining = getRemaining(text);
+          return leftPad(remaining.seconds, 2) + ':' + leftPad(remaining.hundreds, 2);
+        });
+        animate(document.getElementById('your_score'), Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter), Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100));
+      }, 3000);
+    }, 3000);
+    // document.getElementById('missed_shots').innerText = this.shotCounter - this.hitCounter;
 
 
-    var remaining = getRemaining(remainingTime);
-    document.getElementById('time_bonus').innerText = leftPad(remaining.seconds, 2) + ':' + leftPad(remaining.hundreds, 2);
+    // var remaining = getRemaining(remainingTime);
+    // document.getElementById('time_bonus').innerText = leftPad(remaining.seconds, 2) + ':' + leftPad(remaining.hundreds, 2);
 
-    document.getElementById('your_score').innerText = Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100);
+    // document.getElementById('your_score').innerText = Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100);
 
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
 
-      var newEntry = {name: '', score: Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter)};
+      var newEntry = {name: '', score: Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100)};
       this.highscore.push(newEntry);
       this.highscore.sort(function(a,b) {
         return b.score - a.score;
