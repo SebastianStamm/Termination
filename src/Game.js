@@ -46,7 +46,6 @@ var Game = function(events) {
 
 
   this.running = false;
-  // this.startTime = 0;
 
   var progress = () => {
     if(!this.running) {
@@ -213,10 +212,7 @@ Game.prototype.appendSection = function() {
     }
   });
 
-  console.log('finalElement', finalElement);
-
   var xml = sections[this.viewers.length - 1];
-  // var xml = sections[this.viewers.length - 1];
   if(!xml) {
     return;
   }
@@ -227,7 +223,6 @@ Game.prototype.appendSection = function() {
 
   viewer.importXML(xml, (err) => {
     if (err) {
-      // alert('Oh no!! ' + err);
       throw err;
     } else {
 
@@ -245,8 +240,6 @@ Game.prototype.appendSection = function() {
         }
       });
 
-      console.log('firstElement', firstElement);
-
       var otherViewbox = lastSection.get('canvas').viewbox();
 
       var vector = {
@@ -259,7 +252,6 @@ Game.prototype.appendSection = function() {
       currentBox.y = vector.y;
 
       viewer.get('canvas').viewbox(currentBox);
-
     }
   });
 };
@@ -283,7 +275,6 @@ Game.prototype.lowestElementFromScreen = function() {
 
     // x, y, width, height
     var lowerEdge = screenBox.y + screenBox.height;
-
 
     // iterate over all elements in the scene
     viewer.get('elementRegistry').forEach(element => {

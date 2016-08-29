@@ -23,19 +23,18 @@ var animate = function(element, start, end, rendering) {
     .to({ t: end }, 2000)
     .easing(TWEEN.Easing.Cubic.InOut)
     .onUpdate(function() {
-        if(rendering) {
-          element.textContent = rendering(Math.round(this.t));
-        } else {
-          element.textContent = Math.round(this.t);
-        }
-        // element.textContent = Math.round(this.t) + (suffix ? suffix : '');
+      if(rendering) {
+        element.textContent = rendering(Math.round(this.t));
+      } else {
+        element.textContent = Math.round(this.t);
+      }
     })
     .start();
 }
 
 function tweenanimation(time) {
-    requestAnimationFrame(tweenanimation);
-    TWEEN.update(time);
+  requestAnimationFrame(tweenanimation);
+  TWEEN.update(time);
 }
 requestAnimationFrame(tweenanimation);
 
@@ -64,8 +63,6 @@ var Highscore = function(events) {
   this.container.innerHTML = templates('game');
   this.scoreboard.innerHTML = templates('scoreboard');
   this.nameboard.innerHTML = templates('nameboard');
-  // document.getElementById('yourTime').style.display = 'none';
-  // document.getElementById('fastestTime').style.display = 'none';
 
 
   this.shotCounter = 0;
@@ -91,7 +88,7 @@ var Highscore = function(events) {
 
     animate(document.getElementById('hit_elements'), 0, this.hitCounter);
     animate(document.getElementById('your_score'), 0, 100 * this.hitCounter);
-    // document.getElementById('hit_elements').innerText = this.hitCounter;
+
     window.setTimeout(() => {
       animate(document.getElementById('missed_shots'), 0, this.shotCounter - this.hitCounter);
       animate(document.getElementById('your_score'), 100 * this.hitCounter, Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter));
@@ -104,14 +101,6 @@ var Highscore = function(events) {
         animate(document.getElementById('your_score'), Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter), Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100));
       }, 3000);
     }, 3000);
-    // document.getElementById('missed_shots').innerText = this.shotCounter - this.hitCounter;
-
-
-    // var remaining = getRemaining(remainingTime);
-    // document.getElementById('time_bonus').innerText = leftPad(remaining.seconds, 2) + ':' + leftPad(remaining.hundreds, 2);
-
-    // document.getElementById('your_score').innerText = Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100);
-
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
@@ -182,7 +171,6 @@ Highscore.prototype.startGame = function() {
   this.shotCounter = 0;
   this.hitCounter  = 0;
 
-  // this.events.emit('game.start', JSON.parse(test));
   this.events.emit('game.start');
 };
 
