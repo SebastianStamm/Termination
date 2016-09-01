@@ -75,7 +75,8 @@ h3 {
   bottom: 0;
   left: 0;
   right: 0;
-  background: url(img/bg.png) center no-repeat;
+  background: url(img/background.jpg) center no-repeat;
+  background-size: cover;
 }
 
 h1 {
