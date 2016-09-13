@@ -2,7 +2,7 @@ var Controls = function(events) {
 
   document.body.addEventListener('click', function(evt) {
     events.emit('shot.fired', {
-      player: 0,
+      player: Math.floor(Math.random() * 2),
       at: {
         x: evt.clientX,
         y: evt.clientY

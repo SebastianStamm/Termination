@@ -25,22 +25,33 @@
 </script>
 
 <script type="text/template" id="scoreboard">
-<h1 style="margin-top:50px;">Your Score:</h1>
-<div style="width: 50%; float:left;">
+<div style="width: 30%; float:left; -webkit-filter: drop-shadow(2px 2px 1px black) brightness(1.4);">
+  <h2 style="margin-top:50px; -webkit-filter: drop-shadow(2px 2px 1px black) brightness(1.4);">Player 1:</h2>
   <h3>Elements Hit:</h3>
-  <h2 id="hit_elements"></h2>
+  <h2 id="hit_elements0"></h2>
   <h3>Missed Shots:</h3>
-  <h2 id="missed_shots"></h2>
+  <h2 id="missed_shots0"></h2>
   <h3>Hit Ratio:</h3>
-  <h2 id="hit_ratio"></h2>
-  <h3>Time Bonus:</h3>
-  <h2 id="time_bonus"></h2>
+  <h2 id="hit_ratio0"></h2>
 </div>
-<div style="width:50%; float:left;">
+<div style="width: 30%; float:left; -webkit-filter: drop-shadow(2px 2px 1px black) brightness(1.4);">
+  <h2 style="margin-top:50px; -webkit-filter: drop-shadow(2px 2px 1px black) brightness(1.4);">Player 2:</h2>
+  <h3>Elements Hit:</h3>
+  <h2 id="hit_elements1"></h2>
+  <h3>Missed Shots:</h3>
+  <h2 id="missed_shots1"></h2>
+  <h3>Hit Ratio:</h3>
+  <h2 id="hit_ratio1"></h2>
+</div>
+<div style="width:40%; margin-top: 200px; float:left; -webkit-filter: drop-shadow(2px 2px 1px black) brightness(1.4);">
   <h2>Total Score</h2>
   <h1 id="your_score"></h1>
 </div>
-<h3>Shoot to proceed!</h3>
+<div style="width:60%; float: left;">
+  <h2>Time Bonus:</h2>
+  <h2 id="time_bonus"></h2>
+</div>
+<h3 style="-webkit-filter: drop-shadow(2px 2px 1px black) brightness(1.4);">Shoot to proceed!</h3>
 </script>
 <script type="text/template" id="nameboard">
 <h1>New Highscore!</h1>

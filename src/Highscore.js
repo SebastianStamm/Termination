@@ -65,11 +65,11 @@ var Highscore = function(events) {
   this.nameboard.innerHTML = templates('nameboard');
 
 
-  this.shotCounter = 0;
-  this.hitCounter  = 0;
+  this.shotCounter = [0, 0];
+  this.hitCounter  = [0, 0];
 
-  events.on('magazine.shoot', () => this.shotCounter++);
-  events.on('element.destroyed', () => this.hitCounter++);
+  events.on('magazine.shoot', (data) => this.shotCounter[data.player]++);
+  events.on('element.destroyed', (data) => this.hitCounter[data.shot.player]++);
 
   events.once('shot.fired', () => {
     this.startGame();
@@ -79,33 +79,47 @@ var Highscore = function(events) {
     var endTime = Date.now();
     this.scoreboard.style.display = 'block';
 
-    document.getElementById('hit_ratio').innerText = '100 %';
+    var hitSum = this.hitCounter[0] + this.hitCounter[1];
+    var shotSum = this.shotCounter[0] + this.shotCounter[1];
 
-    document.getElementById('missed_shots').textContent = '0';
-    document.getElementById('hit_elements').textContent = '0';
+
+    document.getElementById('hit_ratio0').innerText = '100 %';
+    document.getElementById('hit_ratio1').innerText = '100 %';
+
+    document.getElementById('missed_shots0').textContent = '0';
+    document.getElementById('missed_shots1').textContent = '0';
+    document.getElementById('hit_elements0').textContent = '0';
+    document.getElementById('hit_elements1').textContent = '0';
     document.getElementById('your_score').textContent = '0';
     document.getElementById('time_bonus').textContent = '00:00';
 
-    animate(document.getElementById('hit_elements'), 0, this.hitCounter);
-    animate(document.getElementById('your_score'), 0, 100 * this.hitCounter);
+    animate(document.getElementById('hit_elements0'), 0, this.hitCounter[0]);
+    animate(document.getElementById('hit_elements1'), 0, this.hitCounter[1]);
+    animate(document.getElementById('your_score'), 0, 100 * hitSum);
 
     window.setTimeout(() => {
-      animate(document.getElementById('missed_shots'), 0, this.shotCounter - this.hitCounter);
-      animate(document.getElementById('your_score'), 100 * this.hitCounter, Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter));
-      animate(document.getElementById('hit_ratio'), 100, Math.round(100 * this.hitCounter / this.shotCounter), text => text + ' %');
+      animate(document.getElementById('missed_shots0'), 0, this.shotCounter[0] - this.hitCounter[0]);
+      animate(document.getElementById('missed_shots1'), 0, this.shotCounter[1] - this.hitCounter[1]);
+      animate(document.getElementById('your_score'), 100 * hitSum, Math.round(100 * hitSum * hitSum / shotSum));
+      if(this.shotCounter[0] > 0) {
+        animate(document.getElementById('hit_ratio0'), 100, Math.round(100 * this.hitCounter[0] / this.shotCounter[0]), text => text + ' %');
+      }
+      if(this.shotCounter[1] > 0) {
+        animate(document.getElementById('hit_ratio1'), 100, Math.round(100 * this.hitCounter[1] / this.shotCounter[1]), text => text + ' %');
+      }
       window.setTimeout(() => {
         animate(document.getElementById('time_bonus'), 0, remainingTime, text => {
           var remaining = getRemaining(text);
           return leftPad(remaining.seconds, 2) + ':' + leftPad(remaining.hundreds, 2);
         });
-        animate(document.getElementById('your_score'), Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter), Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100));
+        animate(document.getElementById('your_score'), Math.round(100 * hitSum * hitSum / shotSum), Math.round(100 * hitSum * hitSum / shotSum + remainingTime / 100));
       }, 3000);
     }, 3000);
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
 
-      var newEntry = {name: '', score: Math.round(100 * this.hitCounter * this.hitCounter / this.shotCounter + remainingTime / 100)};
+      var newEntry = {name: '', score: Math.round(100 * hitSum * hitSum / shotSum + remainingTime / 100)};
       this.highscore.push(newEntry);
       this.highscore.sort(function(a,b) {
         return b.score - a.score;
@@ -168,8 +182,8 @@ Highscore.prototype.startGame = function() {
   this.container.style.display = 'none';
   this.startTime = Date.now();
 
-  this.shotCounter = 0;
-  this.hitCounter  = 0;
+  this.shotCounter = [0, 0];
+  this.hitCounter  = [0, 0];
 
   this.events.emit('game.start');
 };

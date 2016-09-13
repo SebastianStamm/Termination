@@ -167,6 +167,10 @@ h3 {
   position: absolute;
 }
 
+.scoreboard h3 {
+  margin-bottom: 0;
+}
+
 .nameboard {
   background-size: cover;
   width: 100%;
