@@ -43,7 +43,7 @@ window.addEventListener('load', function() {
             })
             .start();
             window.setTimeout(function() {
-              document.styleSheets[0].insertRule('.djs-container { transform: perspective(500px) rotateX(15deg) scale(2.5); }', 0);
+              document.styleSheets[0].insertRule('.djs-container { transform: perspective(500px) rotateX(15deg) scale(2.5) !important; }', 0);
             }, 7000);
         break;
 

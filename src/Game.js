@@ -6,6 +6,14 @@ var fs = require('fs');
 var startLevel = fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8');
 
 var sections = [
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
+  fs.readFileSync(__dirname + '/../levels/1_start.bpmn', 'utf8'),
   fs.readFileSync(__dirname + '/../levels/2_subprocesses.bpmn', 'utf8'),
   fs.readFileSync(__dirname + '/../levels/3_activities_große_abstaende_easy.bpmn', 'utf8'),
   fs.readFileSync(__dirname + '/../levels/4_langer_baustein_mit_tasks_und_events_1.bpmn', 'utf8'),
