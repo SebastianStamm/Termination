@@ -1,3 +1,5 @@
+var MARKER_SIZE = 70;
+
 var Controls = function(events) {
 
   this.gamepads = [];
@@ -29,7 +31,7 @@ var Controls = function(events) {
 
     var gamepads = [];
     for(var i = 0; i < gamepadList.length; i++) {
-      if(gamepadList[i] && gamepadList[i].id.indexOf('ATRAK') > -1) {
+      if(gamepadList[i] && (gamepadList[i].id.indexOf('ATRAK') > -1 || gamepadList[i].id.indexOf('Xbox') > -1)) {
         gamepads.push(gamepadList[i]);
       }
     }
@@ -45,8 +47,8 @@ var Controls = function(events) {
           this.btn2[i] = true;
           this.btn3[i] = true;
         }
-        this.markers[i].style.left = realCoordinates.x + 'px';
-        this.markers[i].style.top = realCoordinates.y + 'px';
+        this.markers[i].style.left = realCoordinates.x - MARKER_SIZE / 2 + 'px';
+        this.markers[i].style.top = realCoordinates.y - MARKER_SIZE / 2 + 'px';
 
         if(this.shotAllowed[i] && gp.buttons[0].pressed) {
           events.emit('shot.fired', {
@@ -93,7 +95,10 @@ var Controls = function(events) {
   var createMarker = () => {
     var el = document.createElement('div');
     el.className = 'marker';
-    el.style.backgroundColor = colors[colorCount++];
+    // el.style.backgroundColor = colors[colorCount++];
+    var color = colorCount++;
+    console.log(color);
+    el.innerHTML = '<img src="img/crosshair.png" style="height: 70px; width: 70px; filter: hue-rotate('+(color * 180)+'deg);"/>';
     container.appendChild(el);
 
     return el;
