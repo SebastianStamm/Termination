@@ -6,21 +6,18 @@ var empty = new Audio('sound/empty.wav');
 var reload = new Audio('sound/reload.wav');
 
 var Sounds = function(events) {
-
-  var background = new Audio('sound/bg.wav');
-  background.loop = true;
-  background.volume = .7;
-  background.play();
-  window.bg = background;
-
   events.on('magazine.shoot', () => {
-    shoot[shootCount++%3].play();
+    if(window.applySound) {
+      shoot[shootCount++%3].play();
+    }
   });
   events.on('reload.start', () => {
     reload.play();
   });
   events.on('element.destroyed', () => {
-    explosion[explosionCount++%3].play();
+    if(window.applySound) {
+      explosion[explosionCount++%3].play();
+    }
   });
   events.on('magazine.empty', () => {
     empty.play();

@@ -32,7 +32,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 4 * 1000;
+var INITIAL_TIME = 400000 * 1000;
 
 var Game = function(events) {
   this.events = events;

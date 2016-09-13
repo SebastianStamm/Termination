@@ -33,6 +33,9 @@ var Particles = function(events) {
   };
 
   var createParticle = (amount, pos) => {
+    if(!window.applyParticles) {
+      return;
+    }
     for(var i = 0; i < amount; i++) {
       var el = document.createElement('div');
       el.style.position = 'absolute';
@@ -55,6 +58,8 @@ var Particles = function(events) {
       });
     }
   };
+
+  window.createParticle = createParticle;
 
   events.on('element.destroyed', (data) => {
     createParticle(20, data.shot.at);
