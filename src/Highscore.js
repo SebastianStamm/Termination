@@ -160,6 +160,15 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
     var player = data.player;
     var objHit = document.elementFromPoint(data.at.x, data.at.y);
 
+    if(objHit.id === 'skipEntryButton') {
+      this.events.removeListener('shot.fired', evtHandler);
+      this.highscore.splice(this.highscore.indexOf(newEntry), 1);
+      document.getElementById('namePlayer0').textContent = '___';
+      document.getElementById('namePlayer1').textContent = '___';
+      this.nameboard.style.display = 'none';
+      this.showHighscore();
+    }
+
     if(objHit.parentNode.id === 'letterboard') {
       if(multiplayer) {
         if(player === 0 && name.length < 3) {

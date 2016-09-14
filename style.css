@@ -180,6 +180,19 @@ h3 {
   width: 100%;
 }
 
+#skipEntryButton {
+  position: absolute;
+  width: 324px;
+  top: 10px;
+  right: 10px;
+  border: 1px solid white;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  text-align: center;
+  font-size: 30px;
+  padding: 50px;
+}
+
 #letterboard {
   color: white;
   text-align: center;
