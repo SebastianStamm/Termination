@@ -77,11 +77,26 @@ var Highscore = function(events) {
 
   this.events.on('game.finish', (remainingTime) => {
     var endTime = Date.now();
-    this.scoreboard.style.display = 'block';
 
     var hitSum = this.hitCounter[0] + this.hitCounter[1];
     var shotSum = this.shotCounter[0] + this.shotCounter[1];
 
+    // commit the new highscore entry to localstorage, just to make sure it is persistet
+    var newEntry = {
+      name: '???',
+      score: Math.round(100 * hitSum * hitSum / shotSum + remainingTime / 100),
+      time: new Date().toString()
+    };
+
+    if(newEntry.score) {
+      this.highscore.push(newEntry);
+      this.highscore.sort(function(a,b) {
+        return b.score - a.score;
+      });
+      window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+    }
+
+    this.scoreboard.style.display = 'block';
 
     document.getElementById('hit_ratio0').innerText = '100 %';
     document.getElementById('hit_ratio1').innerText = '100 %';
@@ -118,14 +133,8 @@ var Highscore = function(events) {
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
-      var newEntry = {name: '', score: Math.round(100 * hitSum * hitSum / shotSum + remainingTime / 100)};
 
       if(newEntry.score) {
-        this.highscore.push(newEntry);
-        this.highscore.sort(function(a,b) {
-          return b.score - a.score;
-        });
-
         if(this.highscore.indexOf(newEntry) < 10) {
           this.scoreboard.style.display = 'none';
           this.showNameBoard(newEntry, this.shotCounter[0] && this.shotCounter[1]);
@@ -169,7 +178,7 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
       this.showHighscore();
     }
 
-    if(objHit.parentNode.id === 'letterboard') {
+    if(objHit.parentNode && objHit.parentNode.id === 'letterboard') {
       if(multiplayer) {
         if(player === 0 && name.length < 3) {
           name += objHit.textContent;
@@ -179,17 +188,20 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
       } else {
         name += objHit.textContent;
       }
+
+      newEntry.name = secondName ? (name + ' + ' + secondName) : name;
+      window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+
       document.getElementById('namePlayer0').textContent = name;
       document.getElementById('namePlayer1').textContent = secondName;
       if(multiplayer && name.length === 3 && secondName.length === 3 ||
          !multiplayer && name.length === 3) {
         this.events.removeListener('shot.fired', evtHandler);
-        newEntry.name = secondName ? (name + ' + ' + secondName) : name;
         document.getElementById('namePlayer0').textContent = '___';
         document.getElementById('namePlayer1').textContent = '___';
         this.nameboard.style.display = 'none';
         this.showHighscore();
-        window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+        // window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
       }
     }
   }
