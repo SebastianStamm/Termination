@@ -169,6 +169,10 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
     var player = data.player;
     var objHit = document.elementFromPoint(data.at.x, data.at.y);
 
+    if(!objHit) {
+      return;
+    }
+
     if(objHit.id === 'skipEntryButton') {
       this.events.removeListener('shot.fired', evtHandler);
       this.highscore.splice(this.highscore.indexOf(newEntry), 1);
