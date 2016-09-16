@@ -76,8 +76,6 @@ var Highscore = function(events) {
   });
 
   this.events.on('game.finish', (remainingTime) => {
-    var endTime = Date.now();
-
     var hitSum = this.hitCounter[0] + this.hitCounter[1];
     var shotSum = this.shotCounter[0] + this.shotCounter[1];
 
@@ -96,6 +94,23 @@ var Highscore = function(events) {
       window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
     }
 
+    // this.showScoreCounter(newEntry, hitSum, shotSum);
+    if(newEntry.score) {
+      if(this.highscore.indexOf(newEntry) < 10) {
+        // this.scoreboard.style.display = 'none';
+        this.showNameBoard(newEntry, this.shotCounter[0] && this.shotCounter[1], hitSum, shotSum, remainingTime);
+      } else {
+        this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
+      }
+    } else {
+      this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
+    }
+
+
+  });
+};
+
+Highscore.prototype.showScoreCounter = function(newEntry, hitSum, shotSum, remainingTime) {
     this.scoreboard.style.display = 'block';
 
     document.getElementById('hit_ratio0').innerText = '100 %';
@@ -134,26 +149,24 @@ var Highscore = function(events) {
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
 
-      if(newEntry.score) {
-        if(this.highscore.indexOf(newEntry) < 10) {
-          this.scoreboard.style.display = 'none';
-          this.showNameBoard(newEntry, this.shotCounter[0] && this.shotCounter[1]);
-        } else {
-          this.scoreboard.style.display = 'none';
-          this.showHighscore();
-        }
-      } else {
+      // if(newEntry.score) {
+      //   if(this.highscore.indexOf(newEntry) < 10) {
+      //     this.scoreboard.style.display = 'none';
+      //     this.showNameBoard(newEntry, this.shotCounter[0] && this.shotCounter[1]);
+      //   } else {
+      //     this.scoreboard.style.display = 'none';
+      //     this.showHighscore();
+      //   }
+      // } else {
         this.scoreboard.style.display = 'none';
         this.showHighscore();
-      }
+      // }
 
       });
     }, 2000);
-  });
-
 };
 
-Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
+Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shotSum, remainingTime) {
 
   var name = '';
   var secondName = ''
@@ -180,7 +193,7 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
       document.getElementById('namePlayer0').textContent = '___';
       document.getElementById('namePlayer1').textContent = '___';
       this.nameboard.style.display = 'none';
-      this.showHighscore();
+      this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
     }
 
     if(objHit.parentNode && objHit.parentNode.id === 'letterboard') {
@@ -205,7 +218,7 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer) {
         document.getElementById('namePlayer0').textContent = '___';
         document.getElementById('namePlayer1').textContent = '___';
         this.nameboard.style.display = 'none';
-        this.showHighscore();
+        this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
         // window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
       }
     }
