@@ -32,7 +32,7 @@ Modeler.prototype._modules = [
   require('bpmn-js/lib/features/modeling')
 ];
 
-var INITIAL_TIME = 40 * 1000;
+var INITIAL_TIME = 4 * 1000;
 
 var Game = function(events) {
   this.events = events;
@@ -126,9 +126,17 @@ var Game = function(events) {
 
 
   events.on('button2.pressed', () => {
-    this.running = false;
-    this.container.innerHTML = '';
-    events.emit('game.abort');
+    window.location.reload();
+  });
+
+  var idleTimeout = window.setTimeout(function() {
+    window.location.reload();
+  }, 120000);
+  events.on('shot.fired', () => {
+    window.clearTimeout(idleTimeout);
+    idleTimeout = window.setTimeout(function() {
+      window.location.reload();
+    }, 120000);
   });
 
   events.on('shot.fired', (data) => {
