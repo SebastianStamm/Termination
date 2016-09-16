@@ -126,7 +126,8 @@ var Game = function(events) {
 
 
   events.on('button2.pressed', () => {
-    window.location.reload();
+    this.remainingTime = 0;
+    this.gameOver();
   });
 
   var idleTimeout = window.setTimeout(function() {
