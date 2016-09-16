@@ -125,7 +125,7 @@ var Game = function(events) {
   });
 
 
-  events.on('button2.pressed', () => {
+  events.on('button3.pressed', () => {
     this.remainingTime = 0;
     this.gameOver();
   });
