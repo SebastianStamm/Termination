@@ -178,52 +178,57 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shot
   }
 
   this.nameboard.style.display = 'block';
-  var evtHandler = (data) => {
-    var player = data.player;
-    var objHit = document.elementFromPoint(data.at.x, data.at.y);
 
-    if(!objHit) {
-      return;
-    }
+  window.setTimeout(() => {
+    var evtHandler = (data) => {
+      var player = data.player;
+      var objHit = document.elementFromPoint(data.at.x, data.at.y);
 
-    if(objHit.id === 'skipEntryButton') {
-      this.events.removeListener('shot.fired', evtHandler);
-      this.highscore.splice(this.highscore.indexOf(newEntry), 1);
-      window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
-      document.getElementById('namePlayer0').textContent = '___';
-      document.getElementById('namePlayer1').textContent = '___';
-      this.nameboard.style.display = 'none';
-      this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
-    }
-
-    if(objHit.parentNode && objHit.parentNode.id === 'letterboard') {
-      if(multiplayer) {
-        if(player === 0 && name.length < 3) {
-          name += objHit.textContent;
-        } else if(player === 1 && secondName.length < 3) {
-          secondName += objHit.textContent;
-        }
-      } else {
-        name += objHit.textContent;
+      if(!objHit) {
+        return;
       }
 
-      newEntry.name = secondName ? (name + ' + ' + secondName) : name;
-      window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
-
-      document.getElementById('namePlayer0').textContent = name;
-      document.getElementById('namePlayer1').textContent = secondName;
-      if(multiplayer && name.length === 3 && secondName.length === 3 ||
-         !multiplayer && name.length === 3) {
+      if(objHit.id === 'skipEntryButton') {
         this.events.removeListener('shot.fired', evtHandler);
+        this.highscore.splice(this.highscore.indexOf(newEntry), 1);
+        window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
         document.getElementById('namePlayer0').textContent = '___';
         document.getElementById('namePlayer1').textContent = '___';
         this.nameboard.style.display = 'none';
         this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
-        // window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+      }
+
+      if(objHit.parentNode && objHit.parentNode.id === 'letterboard') {
+        if(multiplayer) {
+          if(player === 0 && name.length < 3) {
+            name += objHit.textContent;
+          } else if(player === 1 && secondName.length < 3) {
+            secondName += objHit.textContent;
+          }
+        } else {
+          name += objHit.textContent;
+        }
+
+        newEntry.name = secondName ? (name + ' + ' + secondName) : name;
+        window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+
+        document.getElementById('namePlayer0').textContent = name;
+        document.getElementById('namePlayer1').textContent = secondName;
+        if(multiplayer && name.length === 3 && secondName.length === 3 ||
+           !multiplayer && name.length === 3) {
+          this.events.removeListener('shot.fired', evtHandler);
+          document.getElementById('namePlayer0').textContent = '___';
+          document.getElementById('namePlayer1').textContent = '___';
+          this.nameboard.style.display = 'none';
+          this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
+          // window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
+        }
       }
     }
-  }
-  this.events.on('shot.fired', evtHandler);
+    this.events.on('shot.fired', evtHandler);
+
+  }, 1000);
+
 };
 
 Highscore.prototype.showHighscore = function() {
