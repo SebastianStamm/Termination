@@ -60,7 +60,7 @@
       if(normalized < -90) {
         normalized += 180;
       }
-
+      window.navigator.vibrate(30);
       socket.send('BAM ' + -normalized + ' ' + currentOrientation[1]);
     }
   });
