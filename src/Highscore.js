@@ -233,6 +233,8 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shot
 
 Highscore.prototype.showHighscore = function() {
 
+  this.events.emit('showHighscore');
+
   this.container.style.display = 'block';
 
   for(var i = 0; i < 10; i++) {

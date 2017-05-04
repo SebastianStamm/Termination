@@ -32,6 +32,13 @@ var Controls = function(events) {
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
       });
+
+      events.on('game.start', function() {
+        qrCodeContainer.style.display = 'none';
+      });
+      events.on('showHighscore', function() {
+        qrCodeContainer.style.display = 'block';
+      });
     }
 
     if(msg[0] === 'INIT' && msg[1] === 'c') {
