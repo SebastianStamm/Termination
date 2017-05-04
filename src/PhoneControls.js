@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body style="margin: 0;">
-  <div id="container" style="width: 100%; height: 100%; position: absolute;">
+var X_DEGREES = 15;
+var Y_DEGREES = 25;
+var MARKER_SIZE = 70;
 
-  </div>
-
-<script type="application/javascript">
+var Controls = function(events) {
   var socket = new WebSocket("ws://"+window.location.host);
   var players = [];
+
+  var container = document.createElement('div');
+  document.body.appendChild(container);
 
   socket.onopen = function(evt) {
     socket.send('INIT v'); // send info that this is a viewer
@@ -26,16 +24,37 @@
     if(msg[0] === 'POS') {
       updatePlayerPosition(player, msg[1], msg[2]);
     }
+
+    if(msg[0] === 'BAM') {
+      var coords = calculateCoords(msg[1], msg[2]);
+      events.emit('shot.fired', {
+        player: player,
+        at: {
+          x: coords.x,
+          y: coords.y
+        }
+      });
+    }
+  };
+
+  var calculateCoords = (x, y) => {
+    var size = {
+      width: document.body.clientWidth,
+      height: document.body.clientHeight
+    };
+    return {
+      x: size.width / 2 + size.width * (x / X_DEGREES) / 2,
+      y: size.height / 2 + size.height * (y / Y_DEGREES) / 2
+    };
   };
 
   function updatePlayerPosition(player, x, y) {
     var el = players[player].element;
 
-    var maxHeight = container.clientHeight;
-    var maxWidth = container.clientWidth;
+    var realCoordinates = calculateCoords(x, y);
 
-    el.style.top = maxHeight / 2 + (y / 15) * maxHeight / 2 + 'px';
-    el.style.left = maxWidth / 2 + (x / 25) * maxWidth / 2 + 'px';
+    el.style.top = realCoordinates.y - MARKER_SIZE / 2 + 'px';
+    el.style.left = realCoordinates.x - MARKER_SIZE / 2 + 'px';
   }
 
   function createPlayer(newPlayer) {
@@ -49,7 +68,9 @@
       id: newPlayer,
       element: el
     });
+
+    updatePlayerPosition(players[players.length - 1], 0, 0);
   }
-</script>
-</body>
-</html>
+}
+
+module.exports = Controls;

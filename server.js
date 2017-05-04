@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static('./'));
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
