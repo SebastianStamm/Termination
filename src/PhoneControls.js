@@ -1,7 +1,7 @@
 var QRCode = require('qrcodejs2');
 
 var X_DEGREES = 15;
-var Y_DEGREES = 25;
+var Y_DEGREES = 15;
 var MARKER_SIZE = 70;
 
 var Controls = function(events) {
@@ -59,6 +59,10 @@ var Controls = function(events) {
         }
       });
     }
+
+    if(msg[0] === 'CLOSE') {
+      removePlayer(player);
+    }
   };
 
   var calculateCoords = (x, y) => {
@@ -71,6 +75,12 @@ var Controls = function(events) {
       y: size.height / 2 + size.height * (y / Y_DEGREES) / 2
     };
   };
+
+  function removePlayer(player) {
+    container.removeChild(players[player].element);
+
+    players.splice(player, 1);
+  }
 
   function updatePlayerPosition(player, x, y) {
     var el = players[player].element;
