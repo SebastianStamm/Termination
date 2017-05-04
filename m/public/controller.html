@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  This is the controller.
+  <br />
+  <textarea readonly="readonly" disabled="true" style="width: 800px; height: 600px;" id="log"></textarea>
+
+<script type="application/javascript">
+  var socket = new WebSocket("ws://192.168.21.39:8080");
+  var currentOrientation = [];
+  var initialized = false;
+
+  socket.onopen = function(evt) {
+    socket.send('INIT c'); // send info that this is a viewer
+
+    window.addEventListener("deviceorientation", function(evt) {
+      var beta;
+      if(evt.beta < 0) {
+        beta = Math.max(evt.beta, -180 - evt.beta);
+      } else {
+        beta = Math.min(evt.beta, 180 - evt.beta);
+      }
+      currentOrientation[0] = (evt.alpha % 180);
+      currentOrientation[1] = -beta;
+
+      if (initialized) {
+        var normalized = (currentOrientation[0] - initialized[0]);
+        if(normalized > 90) {
+          normalized -= 180;
+        }
+        if(normalized < -90) {
+          normalized += 180;
+        }
+
+        socket.send('POS ' + -normalized + ' ' + -beta);
+      }
+    }, true);
+  }
+
+  window.addEventListener('touchstart', (evt) => {
+    log.innerHTML = 'starting';
+
+    initialized = [currentOrientation[0], currentOrientation[1]];
+  });
+</script>
+</body>
+</html>

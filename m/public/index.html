@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body style="margin: 0;">
+  <div id="container" style="width: 100%; height: 100%; position: absolute;">
+
+  </div>
+
+<script type="application/javascript">
+  var socket = new WebSocket("ws://192.168.21.39:8080");
+  var players = [];
+
+  socket.onopen = function(evt) {
+    socket.send('INIT v'); // send info that this is a viewer
+  }
+
+  socket.onmessage = function (event) {
+    // console.log(event.data);
+
+    var player = event.data.split(':')[0];
+    var msg = event.data.split(':')[1].split(' ');
+
+    if(msg[0] === 'INIT' && msg[1] === 'c') {
+      createPlayer(player);
+    }
+
+    if(msg[0] === 'POS') {
+      updatePlayerPosition(player, msg[1], msg[2]);
+    }
+  };
+
+  function updatePlayerPosition(player, x, y) {
+    var el = players[player].element;
+
+    var maxHeight = container.clientHeight;
+    var maxWidth = container.clientWidth;
+
+    // console.log('updating', el, maxHeight);
+
+    el.style.top = maxHeight / 2 + (y / 15) * maxHeight / 2 + 'px';
+    el.style.left = maxWidth / 2 + (x / 25) * maxWidth / 2 + 'px';
+  }
+
+  function createPlayer(newPlayer) {
+    var el = document.createElement('div');
+    el.className = 'marker';
+    el.style= 'position: absolute';
+    el.innerHTML = '<img src="img/crosshair.png" style="height: 70px; width: 70px; filter: hue-rotate('+(players.length * 90)+'deg);"/>';
+    container.appendChild(el);
+
+    players.push({
+      id: newPlayer,
+      element: el
+    });
+  }
+</script>
+</body>
+</html>
