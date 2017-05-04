@@ -8,7 +8,7 @@
   <textarea readonly="readonly" disabled="true" style="width: 800px; height: 600px;" id="log"></textarea>
 
 <script type="application/javascript">
-  var socket = new WebSocket("ws://192.168.21.39:8080");
+  var socket = new WebSocket("ws://"+window.location.host);
   var currentOrientation = [];
   var initialized = false;
 
@@ -40,9 +40,19 @@
   }
 
   window.addEventListener('touchstart', (evt) => {
-    log.innerHTML = 'starting';
+    if(!initialized) {
+      initialized = [currentOrientation[0], currentOrientation[1]];
+    } else {
+      var normalized = (currentOrientation[0] - initialized[0]);
+      if(normalized > 90) {
+        normalized -= 180;
+      }
+      if(normalized < -90) {
+        normalized += 180;
+      }
 
-    initialized = [currentOrientation[0], currentOrientation[1]];
+      socket.send('BAM ' + -normalized + ' ' + currentOrientation[1]);
+    }
   });
 </script>
 </body>

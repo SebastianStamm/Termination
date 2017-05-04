@@ -8,7 +8,7 @@
   </div>
 
 <script type="application/javascript">
-  var socket = new WebSocket("ws://192.168.21.39:8080");
+  var socket = new WebSocket("ws://"+window.location.host);
   var players = [];
 
   socket.onopen = function(evt) {
@@ -16,8 +16,6 @@
   }
 
   socket.onmessage = function (event) {
-    // console.log(event.data);
-
     var player = event.data.split(':')[0];
     var msg = event.data.split(':')[1].split(' ');
 
@@ -35,8 +33,6 @@
 
     var maxHeight = container.clientHeight;
     var maxWidth = container.clientWidth;
-
-    // console.log('updating', el, maxHeight);
 
     el.style.top = maxHeight / 2 + (y / 15) * maxHeight / 2 + 'px';
     el.style.left = maxWidth / 2 + (x / 25) * maxWidth / 2 + 'px';
