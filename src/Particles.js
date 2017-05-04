@@ -1,6 +1,21 @@
 var Particles = function(events) {
   var container = document.createElement('div');
+  container.className = 'particleContainer';
+  container.style.width = '100%';
+  container.style.height = '100%';
+  container.style.position = 'absolute';
+  container.style.pointerEvents = 'none';
   document.body.appendChild(container);
+
+  var canvas = document.createElement('canvas');
+  canvas.setAttribute('width', container.clientWidth);
+  canvas.setAttribute('height', container.clientHeight);
+  container.appendChild(canvas);
+
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+
+  window.canvas = canvas;
 
   this.particles = [];
 
@@ -13,10 +28,10 @@ var Particles = function(events) {
     var delta = now - lastUpdate;
     lastUpdate = now;
 
+    ctx.clearRect(0,0,container.clientWidth, container.clientHeight);
     this.particles.forEach(particle => {
 
       if(now - particle.created > 2000) {
-        container.removeChild(particle.node);
         this.particles.splice(this.particles.indexOf(particle), 1);
       }
 
@@ -25,8 +40,7 @@ var Particles = function(events) {
 
       particle.vel.y +=  delta / 16.6;
 
-      particle.node.style.left = particle.pos.x + 'px';
-      particle.node.style.top = particle.pos.y + 'px';
+      ctx.fillRect(Math.round(particle.pos.x), Math.round(particle.pos.y), 5, 5);
     });
 
     requestAnimationFrame(animate);
@@ -34,16 +48,8 @@ var Particles = function(events) {
 
   var createParticle = (amount, pos) => {
     for(var i = 0; i < amount; i++) {
-      var el = document.createElement('div');
-      el.style.position = 'absolute';
-      el.style.width = '5px';
-      el.style.height = '5px';
-      el.style.pointerEvents = 'none';
-      el.style.backgroundColor = 'white';
-      container.appendChild(el);
       this.particles.push({
         created: Date.now(),
-        node: el,
         pos: {
           x: pos.x,
           y: pos.y
@@ -57,7 +63,7 @@ var Particles = function(events) {
   };
 
   events.on('element.destroyed', (data) => {
-    createParticle(20, data.shot.at);
+    createParticle(30, data.shot.at);
   });
   events.on('magazine.shoot', (data) => {
     createParticle(1, data.at);

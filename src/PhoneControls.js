@@ -83,6 +83,7 @@ var Controls = function(events) {
   }
 
   function updatePlayerPosition(player, x, y) {
+    while(!players[player]) { createPlayer(player); }
     var el = players[player].element;
 
     var realCoordinates = calculateCoords(x, y);
