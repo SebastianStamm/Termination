@@ -34,6 +34,10 @@ wss.on('connection', function connection(ws) {
 
     if(parts[0] === 'INIT' && parts[1] === 'v') {
       viewers.push(ws);
+
+      require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+        ws.send('-1!CONF http://' + add + ':' + server.address().port + '/controller.html');
+      });
     }
 
     if(parts[0] === 'INIT' && parts[1] === 'c') {
@@ -46,7 +50,7 @@ wss.on('connection', function connection(ws) {
 
 function sendMsg(from, msg) {
   viewers.forEach(viewer => {
-    viewer.send(players.indexOf(from) + ':' + msg);
+    viewer.send(players.indexOf(from) + '!' + msg);
   });
 }
 

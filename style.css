@@ -232,3 +232,16 @@ h3 {
 .djs-container .djs-overlays {
   pointer-events: none;
 }
+
+#qrcode {
+  position: absolute;
+  text-align: center;
+  bottom: 25px;
+  right: 25px;
+  padding: 10px;
+  background: white;
+}
+
+#qrcode img {
+  display: inline !important;
+}

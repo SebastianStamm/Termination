@@ -1,3 +1,5 @@
+var QRCode = require('qrcodejs2');
+
 var X_DEGREES = 15;
 var Y_DEGREES = 25;
 var MARKER_SIZE = 70;
@@ -14,8 +16,23 @@ var Controls = function(events) {
   }
 
   socket.onmessage = function (event) {
-    var player = event.data.split(':')[0];
-    var msg = event.data.split(':')[1].split(' ');
+    var player = event.data.split('!')[0];
+    var msg = event.data.split('!')[1].split(' ');
+
+    if(msg[0] === 'CONF') {
+      var qrCodeContainer = document.createElement('div');
+      qrCodeContainer.setAttribute('id', 'qrcode');
+      document.body.appendChild(qrCodeContainer);
+
+      var code = new QRCode(qrCodeContainer, {
+        text: msg[1],
+        width: 256,
+        height: 256,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    }
 
     if(msg[0] === 'INIT' && msg[1] === 'c') {
       createPlayer(player);
