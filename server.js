@@ -41,6 +41,7 @@ wss.on('connection', function connection(ws) {
     }
 
     if(parts[0] === 'INIT' && parts[1] === 'c') {
+      ws.send(players.length);
       players.push(ws);
     }
 

@@ -93,7 +93,7 @@ var Controls = function(events) {
       element: el
     });
 
-    updatePlayerPosition(players[players.length - 1], 0, 0);
+    updatePlayerPosition(players.length - 1, 0, 0);
   }
 }
 

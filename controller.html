@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+<title>Termination Controller</title>
 </head>
-<body>
-  This is the controller.
-  <br />
-  <textarea readonly="readonly" disabled="true" style="width: 800px; height: 600px;" id="log"></textarea>
-
+<body style="margin: 0; background: rgb(25,25,25);">
+<div style="position: absolute; width: 100%; height: 99%; background: rgb(25,25,25);">
+  <img id="gunimage" src="img/gun.png" style="height: 100%; width: 100%;" />
+  <div id="infotext" style="position: absolute; top: 30vh; font-size: 1.5em; background: rgba(0,0,0,.8); color: white; text-align: center; padding: 1em;">
+    Hold phone like a gun and "shoot" at the game display<br />(Tap screen to shoot)
+  </div>
+</div>
 <script type="application/javascript">
   var socket = new WebSocket("ws://"+window.location.host);
   var currentOrientation = [];
   var initialized = false;
+
+  socket.onmessage = function(evt) {
+    var num = parseInt(evt.data);
+    document.getElementById('gunimage').style.filter = 'hue-rotate(' + (num * 90) + 'deg)';
+  }
 
   socket.onopen = function(evt) {
     socket.send('INIT c'); // send info that this is a viewer
@@ -42,6 +51,7 @@
   window.addEventListener('touchstart', (evt) => {
     if(!initialized) {
       initialized = [currentOrientation[0], currentOrientation[1]];
+      document.getElementById('infotext').style.display = 'none';
     } else {
       var normalized = (currentOrientation[0] - initialized[0]);
       if(normalized > 90) {
