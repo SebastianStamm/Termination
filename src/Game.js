@@ -109,17 +109,23 @@ var Game = function(events) {
       if (err) {
         alert('Oh no!! ' + err);
       } else {
-        this.running = true;
+        // this.running = true;
         this.registry = this.viewer.get('elementRegistry');
         this.modeling = this.viewer.get('modeling');
-        this.startTime = Date.now();
-        this.remainingTime = INITIAL_TIME;
-        this.lastUpdate = Date.now();
+        // this.startTime = Date.now();
+        // this.remainingTime = INITIAL_TIME;
+        // this.lastUpdate = Date.now();
 
         // create the next section of the level for smooth game flow
-        this.appendSection();
+        this.appendSection(() => {
+          this.running = true;
+          this.startTime = Date.now();
+          this.remainingTime = INITIAL_TIME;
+          this.lastUpdate = Date.now();
+          progress();
+        });
 
-        progress();
+        // progress();
       }
     });
   });
@@ -184,10 +190,13 @@ var Game = function(events) {
             // scale the time addition with the level progress
             this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000/* / Math.pow(this.viewers.length - 1, 1.2)*/;
 
-            window.setTimeout(() => {
-              console.log('appending another section');
-              this.appendSection();
-            }, 200);
+            console.log('appending another section');
+            this.running = false;
+            this.appendSection(() => {
+              console.log('should continue');
+              this.running = true;
+              progress();
+            });
 
           }
 
@@ -205,7 +214,7 @@ var Game = function(events) {
   });
 };
 
-Game.prototype.appendSection = function() {
+Game.prototype.appendSection = function(cb) {
 
   var lastSection = this.viewers[this.viewers.length - 1];
 
@@ -223,6 +232,7 @@ Game.prototype.appendSection = function() {
 
   var xml = sections[this.viewers.length - 1];
   if(!xml) {
+    cb();
     return;
   }
 
@@ -261,6 +271,8 @@ Game.prototype.appendSection = function() {
       currentBox.y = vector.y;
 
       viewer.get('canvas').viewbox(currentBox);
+
+      cb();
     }
   });
 };
