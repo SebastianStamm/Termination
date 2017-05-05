@@ -39,6 +39,10 @@ var Controls = function(events) {
       qrCodeContainerS.setAttribute('class', 't-qrcode small');
       document.body.appendChild(qrCodeContainerS);
 
+      var jointext = document.createElement('div');
+      jointext.style.fontSize = '1.5em';
+      jointext.textContent = 'Join Now!';
+
       var code = new QRCode(qrCodeContainerS, {
         text: window.location.href + 'controller.html#' + player,
         width: 128,
@@ -47,6 +51,8 @@ var Controls = function(events) {
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
       });
+
+      qrCodeContainerS.appendChild(jointext);
 
       events.on('game.start', function() {
         qrCodeContainer.style.display = 'none';
