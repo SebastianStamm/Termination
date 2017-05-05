@@ -43,7 +43,7 @@
           normalized += 180;
         }
 
-        socket.send('POS ' + -normalized + ' ' + -beta);
+        socket.send('POS ' + -normalized.toPrecision(5) + ' ' + -beta.toPrecision(5));
       }
     }, true);
   }
@@ -61,7 +61,7 @@
         normalized += 180;
       }
       window.navigator.vibrate(30);
-      socket.send('BAM ' + -normalized + ' ' + currentOrientation[1]);
+      socket.send('BAM ' + -normalized.toPrecision(5) + ' ' + currentOrientation[1].toPrecision(5));
     }
   });
 </script>
