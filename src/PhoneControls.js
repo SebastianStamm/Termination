@@ -22,10 +22,11 @@ var Controls = function(events) {
     if(msg[0] === 'CONF') {
       var qrCodeContainer = document.createElement('div');
       qrCodeContainer.setAttribute('id', 'qrcode');
+      qrCodeContainer.setAttribute('class', 't-qrcode');
       document.body.appendChild(qrCodeContainer);
 
       var code = new QRCode(qrCodeContainer, {
-        text: window.location.href + '/controller.html#' + player,
+        text: window.location.href + 'controller.html#' + player,
         width: 256,
         height: 256,
         colorDark : "#000000",
@@ -33,11 +34,27 @@ var Controls = function(events) {
         correctLevel : QRCode.CorrectLevel.H
       });
 
+      var qrCodeContainerS = document.createElement('div');
+      qrCodeContainerS.setAttribute('id', 'qrcode');
+      qrCodeContainerS.setAttribute('class', 't-qrcode small');
+      document.body.appendChild(qrCodeContainerS);
+
+      var code = new QRCode(qrCodeContainerS, {
+        text: window.location.href + 'controller.html#' + player,
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+
       events.on('game.start', function() {
         qrCodeContainer.style.display = 'none';
+        qrCodeContainerS.style.display = 'block';
       });
       events.on('showHighscore', function() {
         qrCodeContainer.style.display = 'block';
+        qrCodeContainerS.style.display = 'none';
       });
     }
 

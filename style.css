@@ -233,8 +233,8 @@ h3 {
   pointer-events: none;
 }
 
-#qrcode {
-  position: absolute;
+.t-qrcode {
+  position: fixed;
   text-align: center;
   bottom: 25px;
   right: 25px;
@@ -242,6 +242,14 @@ h3 {
   background: white;
 }
 
-#qrcode img {
+.t-qrcode img {
   display: inline !important;
+}
+
+.t-qrcode.small {
+  display: none;
+  bottom: initial;
+  top: 15px;
+  right: 15px;
+  padding: 5px;
 }
