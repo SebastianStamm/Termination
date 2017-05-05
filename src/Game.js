@@ -190,11 +190,10 @@ var Game = function(events) {
             // scale the time addition with the level progress
             this.remainingTime += parseInt(el.businessObject.eventDefinitions[0].timeDuration.body, 10) * 1000/* / Math.pow(this.viewers.length - 1, 1.2)*/;
 
-            console.log('appending another section');
             this.running = false;
             this.appendSection(() => {
-              console.log('should continue');
               this.running = true;
+              this.lastUpdate = Date.now();
               progress();
             });
 
