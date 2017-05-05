@@ -43,13 +43,13 @@ wss.on('connection', function connection(ws) {
     const parts = message.split(' ');
 
     if(parts[0] === 'INIT' && parts[1] === 'v') {
-      require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-        ws.send(viewers.length + '!CONF http://' + add + ':' + server.address().port + '/controller.html');
+      // require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+        ws.send(viewers.length + '!CONF');
         viewers.push({
           ws: ws,
           players: []
         });
-      });
+      // });
 
       return;
     }
