@@ -19,13 +19,23 @@ wss.on('connection', function connection(ws) {
   // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
 
   ws.on('close', function close() {
-    if(viewers.indexOf(ws) !== -1) {
-      viewers.splice(viewers.indexOf(ws), 1);
-    }
-    if(players.indexOf(ws) !== -1) {
-      sendMsg(ws, 'CLOSE');
-      players.splice(players.indexOf(ws), 1);
-    }
+    viewers.forEach(viewer => {
+      if(viewer.ws === ws) {
+        viewers.splice(viewers.indexOf(viewer), 1);
+      } else if(viewer.players.indexOf(ws) !== -1) {
+        sendMsg(viewer, ws, 'CLOSE');
+        viewer.players.splice(viewer.players.indexOf(ws), 1);
+      }
+    });
+    // if(viewers.indexOf(ws) !== -1) {
+    //   viewers.splice(viewers.indexOf(viewers.filter(viewer => {
+    //     return viewer.ws === ws
+    //   })), 1);
+    // }
+    // if(players.indexOf(ws) !== -1) {
+    //   sendMsg(ws, 'CLOSE');
+    //   players.splice(players.indexOf(ws), 1);
+    // }
   });
 
   ws.on('message', function incoming(message) {
@@ -33,26 +43,32 @@ wss.on('connection', function connection(ws) {
     const parts = message.split(' ');
 
     if(parts[0] === 'INIT' && parts[1] === 'v') {
-      viewers.push(ws);
-
       require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-        ws.send('-1!CONF http://' + add + ':' + server.address().port + '/controller.html');
+        ws.send(viewers.length + '!CONF http://' + add + ':' + server.address().port + '/controller.html');
+        viewers.push({
+          ws: ws,
+          players: []
+        });
       });
+
+      return;
     }
 
     if(parts[0] === 'INIT' && parts[1] === 'c') {
-      ws.send(players.length);
-      players.push(ws);
+      ws.send(viewers[parts[2]].players.length);
+      viewers[parts[2]].players.push(ws);
     }
 
-    sendMsg(ws, message);
+    viewers.forEach(viewer => {
+      if(viewer.players.indexOf(ws) !== -1) {
+        sendMsg(viewer, ws, message);
+      }
+    })
   });
 });
 
-function sendMsg(from, msg) {
-  viewers.forEach(viewer => {
-    viewer.send(players.indexOf(from) + '!' + msg);
-  });
+function sendMsg(viewer, from, msg) {
+  viewer.ws.send(viewer.players.indexOf(from) + '!' + msg);
 }
 
 server.listen(8080, function listening() {

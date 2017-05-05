@@ -25,7 +25,7 @@ var Controls = function(events) {
       document.body.appendChild(qrCodeContainer);
 
       var code = new QRCode(qrCodeContainer, {
-        text: msg[1],
+        text: msg[1] + '#' + player,
         width: 256,
         height: 256,
         colorDark : "#000000",

@@ -22,7 +22,7 @@
   }
 
   socket.onopen = function(evt) {
-    socket.send('INIT c'); // send info that this is a viewer
+    socket.send('INIT c ' + window.location.hash.substr(1)); // send info that this is a viewer
 
     window.addEventListener("deviceorientation", function(evt) {
       var beta;
