@@ -65,19 +65,19 @@ var Highscore = function(events) {
   this.nameboard.innerHTML = templates('nameboard');
 
 
-  this.shotCounter = [0, 0];
-  this.hitCounter  = [0, 0];
+  this.shotCounter = 0;
+  this.hitCounter  = 0;
 
-  events.on('magazine.shoot', (data) => this.shotCounter[data.player]++);
-  events.on('element.destroyed', (data) => this.hitCounter[data.shot.player]++);
+  events.on('magazine.shoot', (data) => this.shotCounter++);
+  events.on('element.destroyed', (data) => this.hitCounter++);
 
   events.once('shot.fired', () => {
     this.startGame();
   });
 
   this.events.on('game.finish', (remainingTime) => {
-    var hitSum = this.hitCounter[0] + this.hitCounter[1];
-    var shotSum = this.shotCounter[0] + this.shotCounter[1];
+    var hitSum = this.hitCounter;
+    var shotSum = this.shotCounter;
 
     // commit the new highscore entry to localstorage, just to make sure it is persistet
     var newEntry = {
@@ -94,11 +94,9 @@ var Highscore = function(events) {
       window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
     }
 
-    // this.showScoreCounter(newEntry, hitSum, shotSum);
     if(newEntry.score) {
       if(this.highscore.indexOf(newEntry) < 10) {
-        // this.scoreboard.style.display = 'none';
-        this.showNameBoard(newEntry, this.shotCounter[0] && this.shotCounter[1], hitSum, shotSum, remainingTime);
+        this.showNameBoard(newEntry, false, hitSum, shotSum, remainingTime);
       } else {
         this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
       }
@@ -114,28 +112,20 @@ Highscore.prototype.showScoreCounter = function(newEntry, hitSum, shotSum, remai
     this.scoreboard.style.display = 'block';
 
     document.getElementById('hit_ratio0').innerText = '100 %';
-    document.getElementById('hit_ratio1').innerText = '100 %';
 
     document.getElementById('missed_shots0').textContent = '0';
-    document.getElementById('missed_shots1').textContent = '0';
     document.getElementById('hit_elements0').textContent = '0';
-    document.getElementById('hit_elements1').textContent = '0';
     document.getElementById('your_score').textContent = '0';
     document.getElementById('time_bonus').textContent = '00:00';
 
-    animate(document.getElementById('hit_elements0'), 0, this.hitCounter[0]);
-    animate(document.getElementById('hit_elements1'), 0, this.hitCounter[1]);
+    animate(document.getElementById('hit_elements0'), 0, this.hitCounter);
     animate(document.getElementById('your_score'), 0, 100 * hitSum);
 
     window.setTimeout(() => {
-      animate(document.getElementById('missed_shots0'), 0, this.shotCounter[0] - this.hitCounter[0]);
-      animate(document.getElementById('missed_shots1'), 0, this.shotCounter[1] - this.hitCounter[1]);
+      animate(document.getElementById('missed_shots0'), 0, this.shotCounter - this.hitCounter);
       animate(document.getElementById('your_score'), 100 * hitSum, Math.round(100 * hitSum * hitSum / shotSum));
-      if(this.shotCounter[0] > 0) {
-        animate(document.getElementById('hit_ratio0'), 100, Math.round(100 * this.hitCounter[0] / this.shotCounter[0]), text => text + ' %');
-      }
-      if(this.shotCounter[1] > 0) {
-        animate(document.getElementById('hit_ratio1'), 100, Math.round(100 * this.hitCounter[1] / this.shotCounter[1]), text => text + ' %');
+      if(this.shotCounter > 0) {
+        animate(document.getElementById('hit_ratio0'), 100, Math.round(100 * this.hitCounter / this.shotCounter), text => text + ' %');
       }
       window.setTimeout(() => {
         animate(document.getElementById('time_bonus'), 0, remainingTime, text => {
@@ -148,20 +138,8 @@ Highscore.prototype.showScoreCounter = function(newEntry, hitSum, shotSum, remai
 
     window.setTimeout(() => {
       this.events.once('shot.fired', () => {
-
-      // if(newEntry.score) {
-      //   if(this.highscore.indexOf(newEntry) < 10) {
-      //     this.scoreboard.style.display = 'none';
-      //     this.showNameBoard(newEntry, this.shotCounter[0] && this.shotCounter[1]);
-      //   } else {
-      //     this.scoreboard.style.display = 'none';
-      //     this.showHighscore();
-      //   }
-      // } else {
         this.scoreboard.style.display = 'none';
         this.showHighscore();
-      // }
-
       });
     }, 2000);
 };
@@ -170,12 +148,6 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shot
 
   var name = '';
   var secondName = ''
-
-  if(multiplayer) {
-    document.getElementById('highscore_multiplayer').style.display = 'inline';
-  } else {
-    document.getElementById('highscore_multiplayer').style.display = 'none';
-  }
 
   this.nameboard.style.display = 'block';
 
@@ -192,8 +164,7 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shot
         this.events.removeListener('shot.fired', evtHandler);
         this.highscore.splice(this.highscore.indexOf(newEntry), 1);
         window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
-        document.getElementById('namePlayer0').textContent = '___';
-        document.getElementById('namePlayer1').textContent = '___';
+        document.getElementById('namePlayer').textContent = '___';
         this.nameboard.style.display = 'none';
         this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
       }
@@ -212,13 +183,11 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shot
         newEntry.name = secondName ? (name + ' + ' + secondName) : name;
         window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
 
-        document.getElementById('namePlayer0').textContent = name;
-        document.getElementById('namePlayer1').textContent = secondName;
+        document.getElementById('namePlayer').textContent = name;
         if(multiplayer && name.length === 3 && secondName.length === 3 ||
            !multiplayer && name.length === 3) {
           this.events.removeListener('shot.fired', evtHandler);
-          document.getElementById('namePlayer0').textContent = '___';
-          document.getElementById('namePlayer1').textContent = '___';
+          document.getElementById('namePlayer').textContent = '___';
           this.nameboard.style.display = 'none';
           this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
         }
@@ -252,8 +221,8 @@ Highscore.prototype.startGame = function() {
   this.container.style.display = 'none';
   this.startTime = Date.now();
 
-  this.shotCounter = [0, 0];
-  this.hitCounter  = [0, 0];
+  this.shotCounter = 0;
+  this.hitCounter  = 0;
 
   this.events.emit('game.start');
 };
