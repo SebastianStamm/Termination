@@ -16,11 +16,12 @@ window.addEventListener('load', function() {
 
   var game = Termination.game = new Game(events);
   var scoreBoard = Termination.scoreBoard = new Highscore(events);
-  // var controls = Termination.controls = new GamepadControls(events);
+  var controls = Termination.controls = new GamepadControls(events);
   var mouseControls = Termination.mouseControls = new MouseControls(events);
-  var phoneControls = Termination.phoneControls = new PhoneControls(events);
 
   // var sounds = Termination.sounds = new Sounds(events);
   var screenShaking = Termination.screenShaking = new ScreenShaking(events);
   var particles = Termination.particles = new Particles(events);
+
+  var phoneControls = Termination.phoneControls = new PhoneControls(events);
 });

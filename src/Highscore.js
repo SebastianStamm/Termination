@@ -221,7 +221,6 @@ Highscore.prototype.showNameBoard = function(newEntry, multiplayer, hitSum, shot
           document.getElementById('namePlayer1').textContent = '___';
           this.nameboard.style.display = 'none';
           this.showScoreCounter(newEntry, hitSum, shotSum, remainingTime);
-          // window.localStorage.setItem('highscore', JSON.stringify(this.highscore));
         }
       }
     }
