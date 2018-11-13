@@ -5,7 +5,7 @@ var Y_DEGREES = 15;
 var MARKER_SIZE = 70;
 
 var Controls = function(events) {
-  var socket = new WebSocket("ws://"+window.location.host);
+  var socket = new WebSocket("wss://"+window.location.host);
   var players = [];
 
   var container = document.createElement('div');
