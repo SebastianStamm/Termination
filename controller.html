@@ -60,8 +60,11 @@
       if(normalized < -90) {
         normalized += 180;
       }
-      window.navigator.vibrate(30);
       socket.send('BAM ' + -normalized.toPrecision(5) + ' ' + currentOrientation[1].toPrecision(5));
+
+      if(window.navigator && typeof window.navigator.vibrate === 'function') {
+        window.navigator.vibrate(30);
+      }
     }
   });
 </script>
